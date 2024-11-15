@@ -13,7 +13,7 @@ extends CharacterBody2D
 
 var can_fire: bool = true
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	# Initialize the movement direction vector
 	var direction = Vector2.ZERO
 	
@@ -49,7 +49,7 @@ func _on_PrimaryFire_MuzzleFlashTimer_timeout() -> void:
 
 func Primary_Fire() -> void:
 	can_fire = false
-	print("shots fired! Primary Fire")		
+	print("shots fired! Primary Fire")
 	# Enable Muzzle Light
 	primary_muzzle_light.global_position = global_position + Vector2(0, 24)
 	primary_muzzle_light.visible = true
@@ -63,6 +63,9 @@ func Primary_Fire() -> void:
 	# Set position and direction
 	primary_fire_projectile.global_position = global_position + Vector2(0, 25)
 	primary_fire_projectile.direction = Vector2(0, 1)
-		
+	
+	# Pass the player reference
+	primary_fire_projectile.player = self  # Pass 'self' as the player reference
+	
 	# Cooldown timer
 	primary_fire_timer.start(SHOOTING_SPEED)

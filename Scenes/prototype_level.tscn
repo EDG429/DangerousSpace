@@ -1,13 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://u2wmlfkfxqvc"]
 
 [ext_resource type="Texture2D" uid="uid://dk7vjf530p6up" path="res://Assets/Backgrounds/test.png" id="1_84gng"]
-[ext_resource type="PackedScene" uid="uid://bpiurtfslv1ym" path="res://Scenes/Player/player.tscn" id="2_kcbp3"]
+[ext_resource type="Script" path="res://Scripts/prototype_level.gd" id="1_rjitg"]
 
 [node name="prototype_level" type="Node2D"]
+script = ExtResource("1_rjitg")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(578, 506)
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(0, 501)
 texture = ExtResource("1_84gng")
-
-[node name="Player" parent="." instance=ExtResource("2_kcbp3")]
-position = Vector2(502, 84)
