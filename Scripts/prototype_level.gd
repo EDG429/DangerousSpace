@@ -35,3 +35,9 @@ func _ready() -> void:
 			camera.limit_bottom = LNG
 		else:
 			print("Error! No camera detected")
+
+func _process(delta: float) -> void:
+	# Clamp the player's position to keep it within bounds
+	if player:
+		player.position.x = clamp(player.position.x, -SIDE + 10, SIDE - 10)  # Horizontal clamping
+		player.position.y = clamp(player.position.y, 25, LNG - 25)      # Vertical clamping
