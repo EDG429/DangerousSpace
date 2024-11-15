@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ckhdrxkxa6agp"
+path="res://.godot/imported/Squidward Mod Purge.mp3-aef6df65edac3c63b4d1533fa8e94170.mp3str"
+
+[deps]
+
+source_file="res://Assets/SFX/Squidward Mod Purge.mp3"
+dest_files=["res://.godot/imported/Squidward Mod Purge.mp3-aef6df65edac3c63b4d1533fa8e94170.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
