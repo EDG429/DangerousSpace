@@ -1,6 +1,32 @@
-[gd_scene load_steps=2 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=4 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://Scripts/Player/player.gd" id="1_ysrji"]
+[ext_resource type="Texture2D" uid="uid://dvti5pt1ha2b2" path="res://Assets/Sprites/ships_human.png" id="2_lsjj1"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4nfi"]
+height = 48.0
 
 [node name="Player" type="CharacterBody2D"]
+rotation = 3.14108
 script = ExtResource("1_ysrji")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_lsjj1")
+region_enabled = true
+region_rect = Rect2(0, 1104, 32, 48)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+
+[node name="CollisionShape_Hurtbox" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("CapsuleShape2D_c4nfi")
+
+[node name="CollisionShape_Player" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_c4nfi")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(5.96046e-08, 5.82077e-11)
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

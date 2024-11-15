@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://6acqd8bpc8th"]
+
+[ext_resource type="Script" path="res://Scripts/Player/bullet_player_primary_fire.gd" id="1_5v8f3"]
+[ext_resource type="Texture2D" uid="uid://caw03vor8degl" path="res://Assets/Sprites/bullet_primary_fire.png" id="1_nwt4y"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3y10q"]
+radius = 1.0
+height = 10.0
+
+[node name="Bullet_Player_Primary_Fire" type="Area2D"]
+script = ExtResource("1_5v8f3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = 3.12742
+scale = Vector2(0.0165563, 0.0132076)
+texture = ExtResource("1_nwt4y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_3y10q")
