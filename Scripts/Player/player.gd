@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+# Export vars
 @export var SPEED: float = 300.0  # Movement speed of the spaceship
 @export var MAX_HP: int = 100    # Maximum hit points of the player
 @export var DODGE_SPEED: float = 500.0  # Speed boost when dodging
@@ -8,6 +9,7 @@ extends CharacterBody2D
 @export var BULLET_PLAYER_PRIMARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_primary_fire.tscn") # Getting the projectile scene for primary fire
 @export var BULLET_PLAYER_SECONDARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_secondary_fire.tscn") # Getting the projectile scene for secondary fire
 
+# OnReady vars
 @onready var primary_firing_sound: AudioStreamPlayer2D = $Primary_FiringSound
 @onready var secondary_firing_sound: AudioStreamPlayer2D = $Secondary_FiringSound
 @onready var primary_fire_timer: Timer = $PrimaryFire_Timer
@@ -15,10 +17,20 @@ extends CharacterBody2D
 @onready var primary_muzzle_light: PointLight2D = $Primary_MuzzleLight
 @onready var primary_fire_muzzle_flash_timer: Timer = $PrimaryFire_MuzzleFlash_Timer
 
+# Boolean flags
 var can_primary_fire: bool = true
 var can_secondary_fire: bool = true
+var is_dead: bool = false # <= future implementation of a death mechanic (only needs a death animation now)
+var is_dodging: bool = false # <= future implementation of a dodging mechanic
+
+# Key Player Variables
+var health: int
 
 func _physics_process(_delta: float) -> void:
+	# If the player is dead prevent any update
+	if is_dead:
+		return
+	
 	# Initialize the movement direction vector
 	var direction = Vector2.ZERO
 	
@@ -37,6 +49,11 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 	# Check for player fire
 	fire()
+
+func _ready() -> void:
+	health = MAX_HP
+
+#----------------------------- Firing Logic Start ---------------------------------------#
 
 func fire() -> void:
 	if Input.is_action_pressed("primary_fire") and can_primary_fire: # Spawn a new projectile and add it to the scene
@@ -110,3 +127,28 @@ func Secondary_Fire() -> void:
 	
 	# Cooldown timer
 	secondary_fire_timer.start(SECONDARY_SHOOTING_SPEED)
+
+#----------------------------- Firing Logic End -----------------------------------------#
+
+#----------------------- Damage Processing Logic Start ----------------------------------#
+
+# Damage the player
+func take_damage(damage_amount: int):
+	
+	if is_dead:
+		return  # Ignore damage if dead
+	
+	health -= damage_amount
+	health = clamp(health, 0, MAX_HP)
+	#
+	#if health_bar: <= future implementation of a health bar
+		#health_bar.visible = true  # Show the health bar when taking damage
+		#health_bar.set_health(health)  # Update the health bar
+	#
+	if health <= 0:
+		die()
+
+# Kill the player
+func die() -> void:
+	is_dead = true
+	#ap.play("death") <= future implementation of a death animation

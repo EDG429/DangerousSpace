@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dbs4fs2n46vj2"]
 
-[ext_resource type="Script" path="res://Scripts/Player/bullet_player_primary_fire.gd" id="1_kvpx0"]
+[ext_resource type="Script" path="res://Scripts/Player/bullet_player_secondary_fire.gd" id="1_7e4le"]
 [ext_resource type="Texture2D" uid="uid://fmsylj8sya6i" path="res://Assets/Sprites/bullet_secondary_fire.png" id="2_t67aw"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f7vkp"]
@@ -10,7 +10,7 @@ height = 8.0
 [node name="Bullet_Player_Secondary_Fire" type="Area2D"]
 rotation = 3.16202
 scale = Vector2(1.9294, 1.9294)
-script = ExtResource("1_kvpx0")
+script = ExtResource("1_7e4le")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(1.86265e-09, 0)
