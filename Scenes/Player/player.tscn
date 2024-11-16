@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=9 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://Scripts/Player/player.gd" id="1_ysrji"]
 [ext_resource type="Texture2D" uid="uid://dvti5pt1ha2b2" path="res://Assets/Sprites/ships_human.png" id="2_lsjj1"]
 [ext_resource type="AudioStream" uid="uid://b575tqygiclj5" path="res://Assets/SFX/sfx_exp_shortest_soft2.wav" id="3_pi67o"]
+[ext_resource type="AudioStream" uid="uid://ct54lt5a64itw" path="res://Assets/SFX/sfx_exp_short_hard5.wav" id="4_s4u0r"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4nfi"]
 height = 48.0
@@ -38,6 +39,9 @@ shape = SubResource("CapsuleShape2D_c4nfi")
 [node name="PrimaryFire_Timer" type="Timer" parent="."]
 one_shot = true
 
+[node name="SecondaryFire_Timer" type="Timer" parent="."]
+one_shot = true
+
 [node name="MuzzleFlash" type="CPUParticles2D" parent="."]
 position = Vector2(0.012306, -24)
 emitting = false
@@ -48,7 +52,11 @@ color_ramp = SubResource("Gradient_03o2c")
 
 [node name="Primary_FiringSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_pi67o")
-volume_db = -16.0
+volume_db = -6.0
+
+[node name="Secondary_FiringSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_s4u0r")
+volume_db = -20.0
 
 [node name="Primary_MuzzleLight" type="PointLight2D" parent="."]
 position = Vector2(0.0117932, -23)
@@ -67,4 +75,5 @@ one_shot = true
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
+[connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]
 [connection signal="timeout" from="PrimaryFire_MuzzleFlash_Timer" to="." method="_on_PrimaryFire_MuzzleFlashTimer_timeout"]
