@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=10 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://Scripts/Player/player.gd" id="1_ysrji"]
 [ext_resource type="Texture2D" uid="uid://dvti5pt1ha2b2" path="res://Assets/Sprites/ships_human.png" id="2_lsjj1"]
 [ext_resource type="AudioStream" uid="uid://b575tqygiclj5" path="res://Assets/SFX/sfx_exp_shortest_soft2.wav" id="3_pi67o"]
 [ext_resource type="AudioStream" uid="uid://ct54lt5a64itw" path="res://Assets/SFX/sfx_exp_short_hard5.wav" id="4_s4u0r"]
+[ext_resource type="PackedScene" uid="uid://b2fde3mnc20fv" path="res://Scenes/Player/healthbar.tscn" id="5_eegfs"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4nfi"]
 height = 48.0
@@ -73,6 +74,12 @@ wait_time = 0.1
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Healthbar" parent="." instance=ExtResource("5_eegfs")]
+offset_left = -24.0164
+offset_top = 32.0451
+offset_right = 27.9836
+offset_bottom = 42.0451
 
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]

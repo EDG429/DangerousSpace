@@ -8,6 +8,8 @@ extends CharacterBody2D
 @export var SECONDARY_SHOOTING_SPEED: float = 0.2 # Shooting cooldown in seconds
 @export var BULLET_PLAYER_PRIMARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_primary_fire.tscn") # Getting the projectile scene for primary fire
 @export var BULLET_PLAYER_SECONDARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_secondary_fire.tscn") # Getting the projectile scene for secondary fire
+@onready var health_bar: ProgressBar = $Healthbar
+
 
 # OnReady vars
 @onready var primary_firing_sound: AudioStreamPlayer2D = $Primary_FiringSound
@@ -52,6 +54,8 @@ func _physics_process(_delta: float) -> void:
 
 func _ready() -> void:
 	health = MAX_HP
+	if health_bar:
+		health_bar.init_health(health)
 
 #----------------------------- Firing Logic Start ---------------------------------------#
 
@@ -141,9 +145,9 @@ func take_damage(damage_amount: int):
 	health -= damage_amount
 	health = clamp(health, 0, MAX_HP)
 	#
-	#if health_bar: <= future implementation of a health bar
-		#health_bar.visible = true  # Show the health bar when taking damage
-		#health_bar.set_health(health)  # Update the health bar
+	if health_bar: 
+		health_bar.visible = true  # Show the health bar when taking damage
+		health_bar.set_health(health)  # Update the health bar
 	#
 	if health <= 0:
 		die()
@@ -151,4 +155,4 @@ func take_damage(damage_amount: int):
 # Kill the player
 func die() -> void:
 	is_dead = true
-	#ap.play("death") <= future implementation of a death animation
+	#ap.play("death") <= future implementation of a death animation when the proper sprites are collected
