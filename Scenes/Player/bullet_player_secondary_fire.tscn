@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dbs4fs2n46vj2"]
 
-[ext_resource type="Script" path="res://Scripts/Player/bullet_player_secondary_fire.gd" id="1_7e4le"]
+[ext_resource type="Script" path="res://scripts/Player/bullet_player_secondary_fire.gd" id="1_7e4le"]
 [ext_resource type="Texture2D" uid="uid://fmsylj8sya6i" path="res://Assets/Sprites/bullet_secondary_fire.png" id="2_t67aw"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f7vkp"]
@@ -21,3 +21,5 @@ texture = ExtResource("2_t67aw")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -1)
 shape = SubResource("CapsuleShape2D_f7vkp")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

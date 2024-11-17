@@ -8,5 +8,5 @@ func _on_Asteroid_body_entered(body: Node) -> void:
 	if body.has_method("take_damage"):
 		body.take_damage(damage)
 
-func take_damage() -> void:
-	pass
+#func take_damage() -> void:
+	#pass
