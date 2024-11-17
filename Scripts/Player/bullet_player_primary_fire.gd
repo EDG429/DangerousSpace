@@ -1,7 +1,7 @@
 class_name Bullet
 extends Area2D
 # PRIMARY FIRE BULLET
-@export var SPEED: float = 600.0  # Projectile speed
+@export var SPEED: float = 700.0  # Projectile speed
 @export var DAMAGE: int = 10     # Damage dealt to enemies
 @export var MAX_DISTANCE: int = 500 # Maximum distance from the player before removal
 
@@ -35,3 +35,6 @@ func _on_body_entered(body: Node) -> void:
 	elif body is Asteroid:
 		print("touched an asteroid")
 		queue_free()
+
+func set_damage(multiplier: float) -> void:
+	DAMAGE *= multiplier

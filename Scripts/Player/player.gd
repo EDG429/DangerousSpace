@@ -12,7 +12,7 @@ extends CharacterBody2D
 @export var SECONDARY_SHOOTING_SPEED: float = 0.2 # Shooting cooldown in seconds
 @export var BULLET_PLAYER_PRIMARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_primary_fire.tscn") # Getting the projectile scene for primary fire
 @export var BULLET_PLAYER_SECONDARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_secondary_fire.tscn") # Getting the projectile scene for secondary fire
-
+@export var SUPERCHARGE_MULTIPLIER: float = 2.0 # Multiplier for firing speed and damage
 
 
 # OnReady vars
@@ -23,8 +23,15 @@ extends CharacterBody2D
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
 @onready var dodge_timer: Timer = $Dodge_Timer
 @onready var dodge_cooldown_timer: Timer = $DodgeCooldown_Timer
+@onready var supercharge_timer: Timer = $Supercharge_Timer
+
 @onready var primary_muzzle_light: PointLight2D = $Primary_MuzzleLight
 @onready var primary_fire_muzzle_flash_timer: Timer = $PrimaryFire_MuzzleFlash_Timer
+@onready var supercharge_particles_1: CPUParticles2D = $Supercharge_Particles1
+@onready var supercharge_particles_2: CPUParticles2D = $Supercharge_Particles1/Supercharge_Particles2
+
+
+
 
 # Boolean flags
 var can_fire: bool = true
@@ -32,6 +39,7 @@ var can_primary_fire: bool = true
 var can_secondary_fire: bool = true
 var is_dead: bool = false # <= future implementation of a death mechanic (only needs a death animation now)
 var is_dodging: bool = false # Track dodge state
+var is_supercharged: bool = false # Track the supercharged state
 
 # Key Player Variables
 var health: int
@@ -111,6 +119,7 @@ func Primary_Fire() -> void:
 	# Set position and direction
 	primary_fire_projectile.global_position = global_position + Vector2(0, - 26)
 	primary_fire_projectile.direction = Vector2(0, - 1)
+	primary_fire_projectile.set_damage(SUPERCHARGE_MULTIPLIER if is_supercharged else 1.0)
 	
 	# Pass the player reference
 	primary_fire_projectile.player = self  # Pass 'self' as the player reference
@@ -135,6 +144,7 @@ func Secondary_Fire() -> void:
 	get_parent().add_child(left_bullet)
 	left_bullet.global_position = global_position + Vector2(-10, 0)
 	left_bullet.direction = Vector2(-0.5, -1).normalized()
+	left_bullet.set_damage(SUPERCHARGE_MULTIPLIER if is_supercharged else 1.0)
 	left_bullet.player = self
 	
 	# Create the right bullet and fire it diagonally
@@ -142,6 +152,7 @@ func Secondary_Fire() -> void:
 	get_parent().add_child(right_bullet)
 	right_bullet.global_position = global_position + Vector2(10, 0)
 	right_bullet.direction = Vector2(0.5, -1).normalized()
+	right_bullet.set_damage(SUPERCHARGE_MULTIPLIER if is_supercharged else 1.0)
 	right_bullet.player = self
 	
 
@@ -210,3 +221,35 @@ func make_invulnerable(enabled: bool) -> void:
 
 
 # ------------------------------------- Dodge Logic End -------------------------------------------------- #
+
+# ------------------------------------- Buff or Debuff Logic Start --------------------------------------- #
+
+func apply_supercharge_buff(duration: float) -> void:
+	if is_supercharged:
+		return # Avoid stacking the buff
+	
+	is_supercharged = true
+	
+	# Double firerate and damage
+	PRIMARY_SHOOTING_SPEED /= SUPERCHARGE_MULTIPLIER
+	SECONDARY_SHOOTING_SPEED /= SUPERCHARGE_MULTIPLIER	
+	
+	# Enable supercharged visuals
+	supercharge_particles_1.emitting = true
+	supercharge_particles_2.emitting = true
+	
+	# Start the buff timer
+	supercharge_timer.start(duration)
+
+func _on_supercharge_timer_Timeout() -> void:
+	# Remove the buff after the timeout
+	is_supercharged = false
+	
+	# Restore original damage values
+	PRIMARY_SHOOTING_SPEED *= SUPERCHARGE_MULTIPLIER
+	SECONDARY_SHOOTING_SPEED *= SUPERCHARGE_MULTIPLIER
+
+	
+	# Disable supercharged visuals
+	supercharge_particles_1.emitting = false
+	supercharge_particles_2.emitting = false

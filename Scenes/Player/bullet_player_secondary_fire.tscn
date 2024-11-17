@@ -11,7 +11,7 @@ height = 8.0
 rotation = 6.28298
 scale = Vector2(1.9294, 1.9294)
 script = ExtResource("1_7e4le")
-DAMAGE = 35
+DAMAGE = 30
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(1.86265e-09, 0)

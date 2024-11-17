@@ -10,7 +10,6 @@ height = 10.0
 [node name="Bullet_Player_Primary_Fire" type="Area2D" groups=["PlayerBullets"]]
 rotation = -3.12991
 script = ExtResource("1_5v8f3")
-SPEED = 700.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 rotation = 3.12742
