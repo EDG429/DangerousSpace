@@ -21,7 +21,7 @@ width = 100
 use_hdr = true
 
 [node name="Player" type="CharacterBody2D"]
-rotation = 3.14108
+rotation = 0.00418758
 script = ExtResource("1_ysrji")
 
 [node name="Sprite" type="Sprite2D" parent="."]

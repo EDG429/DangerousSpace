@@ -93,8 +93,8 @@ func Primary_Fire() -> void:
 	primary_firing_sound.play()
 	
 	# Set position and direction
-	primary_fire_projectile.global_position = global_position + Vector2(0, 25)
-	primary_fire_projectile.direction = Vector2(0, 1)
+	primary_fire_projectile.global_position = global_position + Vector2(0, - 26)
+	primary_fire_projectile.direction = Vector2(0, - 1)
 	
 	# Pass the player reference
 	primary_fire_projectile.player = self  # Pass 'self' as the player reference
@@ -118,14 +118,14 @@ func Secondary_Fire() -> void:
 	var left_bullet = BULLET_PLAYER_SECONDARY_FIRE_scene.instantiate()
 	get_parent().add_child(left_bullet)
 	left_bullet.global_position = global_position + Vector2(-10, 0)
-	left_bullet.direction = Vector2(-0.5, 1).normalized()
+	left_bullet.direction = Vector2(-0.5, -1).normalized()
 	left_bullet.player = self
 	
 	# Create the right bullet and fire it diagonally
 	var right_bullet = BULLET_PLAYER_SECONDARY_FIRE_scene.instantiate()
 	get_parent().add_child(right_bullet)
 	right_bullet.global_position = global_position + Vector2(10, 0)
-	right_bullet.direction = Vector2(0.5, 1).normalized()
+	right_bullet.direction = Vector2(0.5, -1).normalized()
 	right_bullet.player = self
 	
 
