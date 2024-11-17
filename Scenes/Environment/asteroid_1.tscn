@@ -11,6 +11,8 @@ texture = ExtResource("1_6civg")
 region_enabled = true
 region_rect = Rect2(64, 192, 48, 48)
 script = ExtResource("2_ni7y6")
+damage = 20
+MAX_HP = 200
 
 [node name="Hitbox" type="Area2D" parent="."]
 
