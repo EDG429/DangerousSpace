@@ -5,58 +5,74 @@ extends CharacterBody2D
 @export var SPEED: float = 300.0  # Movement speed of the spaceship
 @export var MAX_HP: int = 100    # Maximum hit points of the player
 @export var DODGE_SPEED: float = 500.0  # Speed boost when dodging
+@export var DODGE_DISTANCE: float = 10.0  # Distanced traveled while dodging
+@export var DODGE_TIME: float = 0.25  # Duration of dodge in seconds
+@export var DODGE_COOLDOWN: float = 2.0  # Cooldown duration in seconds
 @export var PRIMARY_SHOOTING_SPEED: float = 0.075 # Shooting cooldown in seconds
 @export var SECONDARY_SHOOTING_SPEED: float = 0.2 # Shooting cooldown in seconds
 @export var BULLET_PLAYER_PRIMARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_primary_fire.tscn") # Getting the projectile scene for primary fire
 @export var BULLET_PLAYER_SECONDARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_secondary_fire.tscn") # Getting the projectile scene for secondary fire
-@onready var health_bar: ProgressBar = $Healthbar
+
 
 
 # OnReady vars
+@onready var health_bar: ProgressBar = $Healthbar
 @onready var primary_firing_sound: AudioStreamPlayer2D = $Primary_FiringSound
 @onready var secondary_firing_sound: AudioStreamPlayer2D = $Secondary_FiringSound
 @onready var primary_fire_timer: Timer = $PrimaryFire_Timer
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
+@onready var dodge_timer: Timer = $Dodge_Timer
+@onready var dodge_cooldown_timer: Timer = $DodgeCooldown_Timer
 @onready var primary_muzzle_light: PointLight2D = $Primary_MuzzleLight
 @onready var primary_fire_muzzle_flash_timer: Timer = $PrimaryFire_MuzzleFlash_Timer
 
 # Boolean flags
+var can_fire: bool = true
 var can_primary_fire: bool = true
 var can_secondary_fire: bool = true
 var is_dead: bool = false # <= future implementation of a death mechanic (only needs a death animation now)
-var is_dodging: bool = false # <= future implementation of a dodging mechanic
+var is_dodging: bool = false # Track dodge state
 
 # Key Player Variables
 var health: int
+var last_direction: Vector2 = Vector2.UP  # Default direction (forward)
+
+func _ready() -> void:
+	health = MAX_HP
+	if health_bar:
+		health_bar.init_health(health)
 
 func _physics_process(_delta: float) -> void:
 	# If the player is dead prevent any update
 	if is_dead:
 		return
 	
-	# Initialize the movement direction vector
-	var direction = Vector2.ZERO
+	if is_dodging:
+		move_and_slide()
+		return
 	
+	# Initialize the movement direction vector
+	var direction = Vector2.ZERO	
 	# Capture movement inputs for all directions
 	direction.x = Input.get_axis("ui_left", "ui_right")
 	direction.y = Input.get_axis("ui_up", "ui_down")
 	
 	# Normalize the direction vector to maintain consistent speed diagonally
 	if direction != Vector2.ZERO:
-		direction = direction.normalized()
+		last_direction = direction.normalized()
 	
 	# Update the velocity with the input direction
-	velocity = direction * SPEED
-	
+	velocity = direction * SPEED	
 	# Apply the movement
 	move_and_slide()
+	
 	# Check for player fire
-	fire()
+	if can_fire:
+		fire()
 
-func _ready() -> void:
-	health = MAX_HP
-	if health_bar:
-		health_bar.init_health(health)
+	# Check for dodge
+	if Input.is_action_just_pressed("dodge"):
+		dodge()
 
 #----------------------------- Firing Logic Start ---------------------------------------#
 
@@ -157,3 +173,40 @@ func take_damage(damage_amount: int):
 func die() -> void:
 	is_dead = true
 	#ap.play("death") <= future implementation of a death animation when the proper sprites are collected
+
+# -------------------------------------- Dodge Logic Start ---------------------------------------------- #
+
+func dodge() -> void:
+	if is_dodging or is_dead:
+		return  # Ignore if already dodging or dead
+	
+	if dodge_timer.is_stopped() and dodge_cooldown_timer.is_stopped():
+		is_dodging = true  # Start dodge
+		can_fire = false  # Disable firing
+		velocity = last_direction * DODGE_SPEED  # Apply dodge velocity
+		make_invulnerable(true)  # Enable invulnerability
+		dodge_timer.start(DODGE_TIME)  # Start dodge duration timer
+	
+		# Start the dodge cooldown timer
+		dodge_timer.start(DODGE_TIME)
+		
+		 # Start the cooldown timer
+		dodge_cooldown_timer.start(DODGE_COOLDOWN)
+	
+	else:
+		print("Dodge on cooldown!")
+
+func _on_Dodge_Timer_timeout() -> void:
+	is_dodging = false
+	can_fire = true
+	make_invulnerable(false)
+
+func _on_DodgeCooldown_Timer_timeout() -> void:
+	# Logic to re-enable dodge will go here
+	pass
+
+func make_invulnerable(enabled: bool) -> void:
+	set_collision_layer(0 if enabled else 1)
+
+
+# ------------------------------------- Dodge Logic End -------------------------------------------------- #

@@ -43,6 +43,12 @@ one_shot = true
 [node name="SecondaryFire_Timer" type="Timer" parent="."]
 one_shot = true
 
+[node name="Dodge_Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="DodgeCooldown_Timer" type="Timer" parent="."]
+one_shot = true
+
 [node name="MuzzleFlash" type="CPUParticles2D" parent="."]
 position = Vector2(0.012306, -24)
 emitting = false
@@ -85,4 +91,6 @@ offset_bottom = 42.0451
 
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]
+[connection signal="timeout" from="Dodge_Timer" to="." method="_on_Dodge_Timer_timeout"]
+[connection signal="timeout" from="DodgeCooldown_Timer" to="." method="_on_DodgeCooldown_Timer_timeout"]
 [connection signal="timeout" from="PrimaryFire_MuzzleFlash_Timer" to="." method="_on_PrimaryFire_MuzzleFlashTimer_timeout"]
