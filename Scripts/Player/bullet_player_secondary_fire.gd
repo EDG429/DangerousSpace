@@ -1,4 +1,5 @@
 extends Area2D
+
 # SECONDARY FIRE BULLET
 @export var SPEED: float = 600.0  # Projectile speed
 @export var DAMAGE: int = 30     # Damage dealt to enemies

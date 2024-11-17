@@ -7,7 +7,7 @@
 radius = 3.0
 height = 8.0
 
-[node name="Bullet_Player_Secondary_Fire" type="Area2D"]
+[node name="Bullet_Player_Secondary_Fire" type="Area2D" groups=["PlayerBullets"]]
 rotation = 6.28298
 scale = Vector2(1.9294, 1.9294)
 script = ExtResource("1_7e4le")
