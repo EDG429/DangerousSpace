@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3sfski2sjvr7"]
+
+[ext_resource type="Script" path="res://scripts/score_label.gd" id="1_phppx"]
+
+[node name="Label" type="Label"]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0.202213, 1.48243e-05, 0.817193, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+text = "00000"
+script = ExtResource("1_phppx")
