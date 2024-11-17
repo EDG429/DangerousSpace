@@ -28,6 +28,6 @@ func _on_body_entered(body: Node) -> void:
 		body.take_damage(DAMAGE)
 		queue_free()  # Destroy the projectile
 		
-		# Handle collision with an Asteroid object
+	# Handle collision with an Asteroid object
 	if body is Asteroid:
 		queue_free()

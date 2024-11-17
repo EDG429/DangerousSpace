@@ -30,4 +30,5 @@ func _on_body_entered(body: Node) -> void:
 	
 	# Handle collision with an Asteroid object
 	if body is Asteroid:
+		print("touched an asteroid")
 		queue_free()

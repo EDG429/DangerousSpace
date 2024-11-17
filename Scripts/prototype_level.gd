@@ -6,8 +6,8 @@ var camera: Camera2D  # Store the Camera2D reference
 var player: Node2D  # Store the Player reference
 
 # Variables for camera clamping
-var SIDE: float = 0.0  # Width of the texture divided by two
-var LNG: float = 0.0   # Full height (length) of the texture
+var SIDE: int = 0.0  # Width of the texture divided by two
+var LNG: int = 0.0   # Full height (length) of the texture
 
 func _ready() -> void:
 	# Get the Sprite2D node named "Background"
@@ -36,7 +36,7 @@ func _ready() -> void:
 		else:
 			print("Error! No camera detected")
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Clamp the player's position to keep it within bounds
 	if player:
 		player.position.x = clamp(player.position.x, -SIDE + 10, SIDE - 10)  # Horizontal clamping
