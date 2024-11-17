@@ -4,6 +4,7 @@ const player_scene = preload("res://Scenes/Player/player.tscn")
 
 var camera: Camera2D  # Store the Camera2D reference
 var player: Node2D  # Store the Player reference
+var asteroid: Node2D # Store asteroid reference
 
 # Variables for camera clamping
 var SIDE: int = 0.0  # Width of the texture divided by two
@@ -23,7 +24,7 @@ func _ready() -> void:
 		# Instance and add the player to the scene
 		player = player_scene.instantiate()
 		add_child(player)
-		player.global_position = Vector2(0, 25)  # Set the initial position (adjust as needed)
+		player.global_position = Vector2(0, 200)  # Set the initial position (adjust as needed)
 	
 		# Access the existing Camera2D on the player
 		camera = player.get_node("Camera2D") as Camera2D

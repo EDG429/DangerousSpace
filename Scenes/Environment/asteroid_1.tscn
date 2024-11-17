@@ -17,4 +17,5 @@ script = ExtResource("2_ni7y6")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 shape = SubResource("CircleShape2D_20ypo")
 
+[connection signal="area_entered" from="Hitbox" to="." method="_on_Asteroid_body_entered"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_Asteroid_body_entered"]

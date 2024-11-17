@@ -1,5 +1,5 @@
+class_name Bullet
 extends Area2D
-
 # PRIMARY FIRE BULLET
 @export var SPEED: float = 600.0  # Projectile speed
 @export var DAMAGE: int = 10     # Damage dealt to enemies
@@ -10,7 +10,7 @@ var player: Node = null # Ref to player
 
 
 func _ready() -> void:
-	# Record the initial position of the projectile
+	
 	pass
 
 func _physics_process(delta: float) -> void:
@@ -28,8 +28,8 @@ func _on_body_entered(body: Node) -> void:
 	if body.has_method("take_damage") and body.name != "Player":
 		body.take_damage(DAMAGE)
 		queue_free()  # Destroy the projectile
-	
+
 	# Handle collision with an Asteroid object
-	elif body is Asteroid:
-		print("touched an asteroid")
-		queue_free()
+	#elif body is Asteroid:
+		#print("touched an asteroid")
+		#queue_free()
