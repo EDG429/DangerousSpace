@@ -45,6 +45,9 @@ var is_supercharged: bool = false # Track the supercharged state
 var health: int
 var last_direction: Vector2 = Vector2.UP  # Default direction (forward)
 
+# Signals
+signal player_death_complete
+
 func _ready() -> void:
 	health = MAX_HP
 	if health_bar:
@@ -183,8 +186,14 @@ func take_damage(damage_amount: int):
 # Kill the player
 func die() -> void:
 	is_dead = true
-	#ap.play("death") <= future implementation of a death animation when the proper sprites are collected
-
+	# $DeathAnimationPlayer.play("death") <= future implementation of a death animation when the proper sprites are collected
+	# $DeathAudioPlayer.play()
+	# await $DeathAnimationPlayer.animation_finished
+	print("Player death animation.")
+	
+	# Emit signal when death process is complete
+	emit_signal("player_death_complete")
+	print("Player death signal.")
 # -------------------------------------- Dodge Logic Start ---------------------------------------------- #
 
 func dodge() -> void:

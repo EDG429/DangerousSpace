@@ -54,7 +54,18 @@ func _ready() -> void:
 	supercharge_spawn_timer.wait_time = SUPERCHARGE_BUFF_SPAWN_INTERVAL
 	supercharge_spawn_timer.start()
 	
+	# Register player and deadline with the GameState singleton
+	GameState.player = player
+	GameState.deadline = deadline
+	GameState.LNG = LNG
+	# Connect the game_over signal to handle game over logic
+	GameState.connect("game_over", Callable(self, "_on_game_over"))
+	
 func _process(_delta: float) -> void:
+	
+	# Check for game over conditions
+	GameState.check_game_over()
+	
 	# Clamp the player's position to keep it within bounds
 	if player:
 		player.position.x = clamp(player.position.x, -SIDE + 15, SIDE - 15)  # Horizontal clamping
@@ -94,3 +105,10 @@ func _on_Deadline_Move_Timer_timeout() -> void:
 	if deadline:
 		deadline.position += Vector2(0, -DEADLINE_MOVE_OFFSET)
 		
+# ---------------------- Deadline Moving Logic End ----------------------------------- #
+
+# ---------------------- Game Over Logic Start --------------------------------------- #
+func _on_game_over(reason: String) -> void:
+	print("Game Over triggered! Reason: ", reason)
+	# Transition to a Game Over scene (or handle game over logic here)
+	get_tree().change_scene_to_file("res://Scenes/GameOver/game_over.tscn")
