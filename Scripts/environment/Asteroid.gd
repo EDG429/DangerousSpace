@@ -2,8 +2,8 @@ class_name Asteroid
 
 extends Sprite2D
 
-@export var damage: int = 25  # Default damage the asteroid deals
-@export var MAX_HP: int = 50    # Maximum hit points of the asteroid
+@export var damage: int = 25 # Default damage the asteroid deals
+@export var MAX_HP: int = 50 # Maximum hit points of the asteroid
 
 var health: int
 var is_dead: bool
@@ -23,7 +23,7 @@ func _on_Asteroid_body_entered(body: Node) -> void:
 func take_damage(damage_amount: int):
 	
 	if is_dead:
-		return  # Ignore damage if dead
+		return # Ignore damage if dead
 	
 	health -= damage_amount
 	health = clamp(health, 0, MAX_HP)

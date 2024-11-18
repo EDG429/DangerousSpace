@@ -11,12 +11,12 @@ height = 10.0
 rotation = -3.12991
 script = ExtResource("1_5v8f3")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." groups=["bullets"]]
 rotation = 3.12742
 scale = Vector2(0.0165563, 0.0132076)
 texture = ExtResource("1_nwt4y")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["bullets"]]
 shape = SubResource("CapsuleShape2D_3y10q")
 
 [connection signal="area_entered" from="." to="." method="_on_body_entered"]

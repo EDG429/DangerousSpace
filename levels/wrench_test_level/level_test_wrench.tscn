@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://c86qdaatwdnh7"]
+
+[ext_resource type="Texture2D" uid="uid://dvti5pt1ha2b2" path="res://Assets/Sprites/ships_human.png" id="1_a15xj"]
+[ext_resource type="Script" path="res://levels/wrench_test_level/Player/playerShip.gd" id="2_47hl6"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(359, 610)
+texture = ExtResource("1_a15xj")
+region_enabled = true
+region_rect = Rect2(-0.180473, 1100.78, 32.9464, 53.275)
+script = ExtResource("2_47hl6")
