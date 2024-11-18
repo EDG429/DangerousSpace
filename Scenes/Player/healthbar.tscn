@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/Player/healthbar.gd" id="1_r2c7a"]
 
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xfb8d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1vfp1"]

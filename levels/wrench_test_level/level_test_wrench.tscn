@@ -1,13 +1,30 @@
-[gd_scene load_steps=3 format=3 uid="uid://c86qdaatwdnh7"]
+[gd_scene load_steps=4 format=3 uid="uid://c86qdaatwdnh7"]
 
 [ext_resource type="Texture2D" uid="uid://dvti5pt1ha2b2" path="res://Assets/Sprites/ships_human.png" id="1_a15xj"]
-[ext_resource type="Script" path="res://levels/wrench_test_level/Player/playerShip.gd" id="2_47hl6"]
+[ext_resource type="Script" path="res://levels/wrench_test_level/scripts/playerShip.gd" id="1_ulo3a"]
+[ext_resource type="AudioStream" uid="uid://b575tqygiclj5" path="res://Assets/SFX/sfx_exp_shortest_soft2.wav" id="4_u1rhr"]
 
-[node name="Node2D" type="Node2D"]
+[node name="PlayerShip" type="Node2D"]
+script = ExtResource("1_ulo3a")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(359, 610)
 texture = ExtResource("1_a15xj")
 region_enabled = true
-region_rect = Rect2(-0.180473, 1100.78, 32.9464, 53.275)
-script = ExtResource("2_47hl6")
+region_rect = Rect2(-0.105408, 1054.11, 32.3898, 46.3463)
+
+[node name="PrimaryFireTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="PrimaryFireSpawn" type="Node2D" parent="."]
+position = Vector2(0, -19)
+
+[node name="PrimaryFireSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_u1rhr")
+
+[node name="SecondaryFireSpawn" type="Node2D" parent="."]
+
+[node name="SecondaryFireTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[connection signal="timeout" from="PrimaryFireTimer" to="." method="_on_fire_timer_timeout"]
+[connection signal="timeout" from="SecondaryFireTimer" to="." method="_on_secondary_fire_timer_timeout"]

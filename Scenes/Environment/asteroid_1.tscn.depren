@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://cf5fsjlg3bijt"]
+
+[ext_resource type="Texture2D" uid="uid://b243wxpqsmc3q" path="res://Assets/Sprites/ships_asteroids.png" id="1_6civg"]
+[ext_resource type="Script" path="res://Scripts/environment/Asteroid.gd" id="2_ni7y6"]
+
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_20ypo"]
+radius = 25.1794
+
+[node name="Asteroid1" type="Sprite2D"]
+texture = ExtResource("1_6civg")
+region_enabled = true
+region_rect = Rect2(64, 192, 48, 48)
+script = ExtResource("2_ni7y6")
+damage = 20
+MAX_HP = 200
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("CircleShape2D_20ypo")
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_Asteroid_body_entered"]
+[connection signal="body_entered" from="Hitbox" to="." method="_on_Asteroid_body_entered"]

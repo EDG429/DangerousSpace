@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://csfo45f6ilkfy"]
+
+[ext_resource type="Script" path="res://levels/wrench_test_level/scripts/primary_attack.gd" id="1_lobrk"]
+[ext_resource type="Texture2D" uid="uid://fmsylj8sya6i" path="res://Assets/Sprites/bullet_secondary_fire.png" id="2_3cvn4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f46pe"]
+radius = 1.0
+
+[node name="PrimaryAttack" type="Area2D"]
+script = ExtResource("1_lobrk")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.01, 0.01)
+texture = ExtResource("2_3cvn4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_f46pe")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

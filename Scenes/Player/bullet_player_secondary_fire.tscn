@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/Player/bullet_player_secondary_fire.gd" id="1_7e4le"]
 [ext_resource type="Texture2D" uid="uid://fmsylj8sya6i" path="res://Assets/Sprites/bullet_secondary_fire.png" id="2_t67aw"]
 
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f7vkp"]
 radius = 3.0
 height = 8.0

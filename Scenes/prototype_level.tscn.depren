@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://u2wmlfkfxqvc"]
+
+[ext_resource type="Texture2D" uid="uid://dk7vjf530p6up" path="res://Assets/Backgrounds/test.png" id="1_84gng"]
+[ext_resource type="Script" path="res://Scripts/prototype_level.gd" id="1_rjitg"]
+[ext_resource type="PackedScene" uid="uid://cf5fsjlg3bijt" path="res://Scenes/Environment/asteroid_1.tscn" id="3_e6lov"]
+[ext_resource type="PackedScene" path="res://Supercharge_Buff.tscn" id="4_7ie2g"]
+
+
+[node name="prototype_level" type="Node2D"]
+script = ExtResource("1_rjitg")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(0, 501)
+texture = ExtResource("1_84gng")
+
+[node name="Asteroid1" parent="." instance=ExtResource("3_e6lov")]
+position = Vector2(67, 136)
+
+[node name="Buff" parent="." instance=ExtResource("4_7ie2g")]
+position = Vector2(-94, 378)
