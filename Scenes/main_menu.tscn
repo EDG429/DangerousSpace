@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://bhfem4qnrq8yl"]
+
+[ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_ajehi"]
+[ext_resource type="Texture2D" uid="uid://db1ar7botohxk" path="res://Assets/Backgrounds/31669-775243696-Masterpiece,best quality, feet,slender legs,lineart,limited color palette,vector art,cowboy shot,blue theme, dark theme,skulls,_.png" id="2_l2qt4"]
+
+[node name="Main Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ajehi")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.021875
+anchor_top = -0.371579
+anchor_right = 0.166639
+anchor_bottom = 0.290198
+offset_right = 23.6755
+offset_bottom = 60.8798
+grow_vertical = 2
+scale = Vector2(2.56582, 2.56582)
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Start" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../Quit")
+text = "Start"
+
+[node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Options"
+
+[node name="Quit" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../Start")
+text = "Quit"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+autoplay = true
+
+[node name="background" type="Sprite2D" parent="."]
+z_index = -5
+position = Vector2(370, 557)
+scale = Vector2(1.03743, 1.03743)
+texture = ExtResource("2_l2qt4")
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

@@ -13,7 +13,8 @@ var deadline: Node = null
 
 func _ready() -> void:
 	print("GameState initialized.")
-
+	player = null
+	deadline = null
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -40,3 +41,8 @@ func _on_player_death_complete() -> void:
 	
 	# Transport to the Game Over scene
 	get_tree().change_scene_to_file("res://Scenes/GameOver/game_over.tscn")
+
+func clear_references() -> void:
+	player = null
+	deadline = null
+	print("GameState references cleared.")

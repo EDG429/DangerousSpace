@@ -110,5 +110,5 @@ func _on_Deadline_Move_Timer_timeout() -> void:
 # ---------------------- Game Over Logic Start --------------------------------------- #
 func _on_game_over(reason: String) -> void:
 	print("Game Over triggered! Reason: ", reason)
-	# Transition to a Game Over scene (or handle game over logic here)
-	get_tree().change_scene_to_file("res://Scenes/GameOver/game_over.tscn")
+	
+	

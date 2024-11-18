@@ -1,0 +1,92 @@
+[gd_scene load_steps=5 format=3 uid="uid://daqmou0wqnvpq"]
+
+[ext_resource type="Script" path="res://scripts/options.gd" id="1_k8kli"]
+[ext_resource type="Texture2D" uid="uid://db1ar7botohxk" path="res://Assets/Backgrounds/31669-775243696-Masterpiece,best quality, feet,slender legs,lineart,limited color palette,vector art,cowboy shot,blue theme, dark theme,skulls,_.png" id="2_s0mny"]
+
+[sub_resource type="SystemFont" id="SystemFont_1eegv"]
+
+[sub_resource type="SystemFont" id="SystemFont_8fymc"]
+
+[node name="Options" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k8kli")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_fonts/font = SubResource("SystemFont_1eegv")
+theme_override_font_sizes/font_size = 50
+text = "OPTIONS MENU"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = -48
+
+[node name="29101-4258760819-score9,Score8Up,Score7UpBreak1Boy,cowboyShot,solo,helmet,WearingEdgDemoness,horns,Armor,spikes,glowing,knight,helli" type="Sprite2D" parent="."]
+z_index = -5
+position = Vector2(385, 366)
+scale = Vector2(0.944071, 0.944071)
+texture = ExtResource("2_s0mny")
+
+[node name="TabContainer" type="TabContainer" parent="."]
+z_index = -5
+layout_mode = 2
+offset_left = 66.0
+offset_top = 132.0
+offset_right = 392.0
+offset_bottom = 274.0
+scale = Vector2(2.03176, 2.72354)
+current_tab = 0
+
+[node name="Sound" type="TabBar" parent="TabContainer"]
+layout_mode = 2
+focus_neighbor_left = NodePath("../Controls")
+metadata/_tab_index = 0
+
+[node name="Graphics" type="TabBar" parent="TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Controls" type="TabBar" parent="TabContainer"]
+visible = false
+layout_mode = 2
+focus_neighbor_right = NodePath("../Sound")
+metadata/_tab_index = 2
+
+[node name="Quit to menu" type="Button" parent="."]
+z_index = 5
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+offset_left = 285.0
+offset_top = 544.0
+offset_right = 396.0
+offset_bottom = 575.0
+scale = Vector2(1.5821, 1.64645)
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_override_fonts/font = SubResource("SystemFont_8fymc")
+text = "Quit to menu"
+
+[connection signal="pressed" from="Quit to menu" to="." method="_on_quit_to_menu_pressed"]
