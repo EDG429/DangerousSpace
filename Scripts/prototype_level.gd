@@ -1,15 +1,18 @@
+class_name WorldLevel
 extends Node2D
 
 const player_scene = preload("res://Scenes/Player/player.tscn")
 
 
 @onready var supercharge_spawn_timer: Timer = $SuperchargeSpawn_Timer
+@onready var background: Sprite2D = $Background
+@onready var deadline: StaticBody2D = $Deadline
 
 @export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 20.0
 @export var SUPERCHARGE_BUFF_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
 @export var SUPERCHARGE_BUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Buff.tscn")
+@export var DEADLINE_MOVE_OFFSET: float = 50.0  # Pixels to move upwards
 
-@onready var background: Sprite2D = $Background
 
 
 var camera: Camera2D  # Store the Camera2D reference
@@ -63,17 +66,20 @@ func spawn_supercharge_buff() -> void:
 	if not player:
 		return # Need player to spawn
 	
+	# Fetch the player's current position
+	var player_current_position = player.global_position
+	
 	# Generate in a random position around the player
-	var spawn_position = player.global_position + Vector2(
-		randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS),
-		randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS)
-	)
+	var spawn_x = player_current_position.x + randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS)
+	var spawn_y = - player_current_position.y + randf_range(- 60, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
 	
-	 # Clamp the spawn position to the background's dimensions
-	spawn_position.x = clamp(spawn_position.x, -SIDE, SIDE)
-	spawn_position.y = clamp(spawn_position.y, -LNG / 2, LNG / 2)
+	# Clamp the spawn position to ensure it remains within background bounds
+	spawn_x = clamp(spawn_x, -SIDE, SIDE)  # Clamp X to stay within left/right bounds
+	spawn_y = clamp(spawn_y, player_current_position.y - 60, LNG / 2)  # Clamp Y to stay forward and within bounds
 	
-	 # Instance the Supercharge Buff and add it to the scene
+	var spawn_position = Vector2(spawn_x, spawn_y)
+	
+	# Instance the Supercharge Buff and add it to the scene
 	var supercharge_buff = SUPERCHARGE_BUFF_SCENE.instantiate()
 	add_child(supercharge_buff)
 	supercharge_buff.global_position = spawn_position
@@ -82,3 +88,9 @@ func _on_SuperchargeSpawn_Timer_timeout() -> void:
 	spawn_supercharge_buff()
 
 # ---------------------- Buff Spawning Logic End  -------------------------------------- #
+
+# ---------------------- Deadline Moving Logic Start ----------------------------------- #
+func _on_Deadline_Move_Timer_timeout() -> void:
+	if deadline:
+		deadline.position += Vector2(0, -DEADLINE_MOVE_OFFSET)
+		
