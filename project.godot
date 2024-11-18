@@ -23,6 +23,7 @@ ScoreManager="*res://scripts/score_manager.gd"
 
 window/size/viewport_width=768
 window/size/viewport_height=950
+window/size/resizable=false
 window/stretch/mode="canvas_items"
 
 [input]

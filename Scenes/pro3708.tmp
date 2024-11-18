@@ -18,5 +18,4 @@ position = Vector2(67, 6520)
 position = Vector2(-94, 6990)
 
 [node name="SuperchargeSpawn_Timer" type="Timer" parent="."]
-
-[connection signal="timeout" from="SuperchargeSpawn_Timer" to="." method="_on_SuperchargeSpawn_Timer_timeout"]
+one_shot = true
