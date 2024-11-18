@@ -17,7 +17,7 @@ func _on_Asteroid_body_entered(body: Node) -> void:
 		print("Collided with asteroid")
 		body.take_damage(damage)
 	if body.is_in_group("PlayerBullets"):
-		# take_damage(damage) <= we can decide if we want the asteroid to be an indestructible or destructible
+		take_damage(damage) # <= we can decide if we want the asteroid to be an indestructible or destructible
 		body.queue_free()
 
 func take_damage(damage_amount: int):
@@ -33,4 +33,5 @@ func take_damage(damage_amount: int):
 
 func explode() -> void:
 	is_dead = true
+	ScoreManager.add_points(50)
 	queue_free()
