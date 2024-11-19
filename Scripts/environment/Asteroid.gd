@@ -5,6 +5,11 @@ extends Sprite2D
 @export var damage: int = 25  # Default damage the asteroid deals
 @export var MAX_HP: int = 50    # Maximum hit points of the asteroid
 
+@onready var asteroid: Asteroid = $"."
+@onready var damage_feedback_timer: Timer = $DamageFeedback_Timer
+
+var is_taking_damage: bool = false
+
 var health: int
 var is_dead: bool
 
@@ -30,6 +35,17 @@ func take_damage(damage_amount: int):
 	
 	if health <= 0:
 		explode()
+	else:
+		flicker()
+
+func flicker() -> void:
+	is_taking_damage = true
+	asteroid.modulate = Color(1, 0, 0) # Flicker to red
+	damage_feedback_timer.start()
+
+func _on_DamageFeedbackTimer_timeout() -> void:
+	asteroid.modulate = Color(1, 1, 1)  # Revert the sprite color to normal
+	is_taking_damage = false
 
 func explode() -> void:
 	is_dead = true
