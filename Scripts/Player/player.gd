@@ -65,7 +65,8 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	# If the player is dead prevent any update
-	if is_dead:
+	if is_dead or health <= 0:
+		make_invulnerable(true)
 		return
 	
 	if is_dodging:
@@ -231,12 +232,19 @@ func _on_ScreenShakeTimer_timeout() -> void:
 
 # Kill the player
 func die() -> void:
-	is_dead = true
-	# $DeathAnimationPlayer.play("death") <= future implementation of a death animation when the proper sprites are collected
-	# $DeathAudioPlayer.play()
-	# await $DeathAnimationPlayer.animation_finished
-	print("Player death animation.")
+	animated_sprite.play("death")
 	
+	 # Play the death audio
+	# $DeathAudioPlayer.play()
+	
+	# Calculate the length of the death animation
+	var animation_frames: int = 10
+	var animation_duration = animation_frames / animated_sprite.speed_scale  # Calculate the duration
+	
+	# Wait for the animation to finish
+	await get_tree().create_timer(3).timeout
+	print("Player death animation.")
+	is_dead = true
 	# Emit signal when death process is complete
 	emit_signal("player_death_complete")
 	print("Player death signal.")
