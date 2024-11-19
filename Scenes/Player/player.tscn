@@ -117,8 +117,6 @@ offset_top = 32.0451
 offset_right = 27.9836
 offset_bottom = 42.0451
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-
 [node name="Supercharge_Particles1" type="CPUParticles2D" parent="."]
 emitting = false
 amount = 50
@@ -166,6 +164,11 @@ radial_accel_min = -100.0
 radial_accel_max = -100.0
 radial_accel_curve = SubResource("Curve_qtl5h")
 color = Color(0.924349, 0.975658, 1, 1)
+
+[node name="DodgingSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_lsjj1")
+region_enabled = true
+region_rect = Rect2(64, 1104, 32, 48)
 
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]

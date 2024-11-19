@@ -24,6 +24,7 @@ extends CharacterBody2D
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
 @onready var damage_flicker_timer: Timer = $DamageFlicker_Timer
 @onready var dodge_timer: Timer = $Dodge_Timer
+@onready var dodging_sprite: Sprite2D = $DodgingSprite
 @onready var dodge_cooldown_timer: Timer = $DodgeCooldown_Timer
 @onready var supercharge_timer: Timer = $Supercharge_Timer
 @onready var debuff_timer: Timer = $Debuff_Timer

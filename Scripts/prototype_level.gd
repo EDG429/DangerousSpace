@@ -12,13 +12,11 @@ const player_scene = preload("res://Scenes/Player/player.tscn")
 @export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 20.0
 @export var SUPERCHARGE_BUFF_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
 @export var ASTEROID_SPAWN_INTERVAL: float = 5.0
-@export var ASTEROID_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
+@export var ASTEROID_SPAWN_RADIUS: float = 150.0  # Maximum distance from the player to spawn the buff
 @export var SUPERCHARGE_BUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Buff.tscn")
 @export var DEBUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Debuff.tscn")
 @export var ASTEROID_SCENE = preload("res://Scenes/Environment/destructible_asteroid.tscn")
 @export var DEADLINE_MOVE_OFFSET: float = 50.0  # Pixels to move upwards
-
-
 
 var camera: Camera2D  # Store the Camera2D reference
 var player: Node2D  # Store the Player reference
