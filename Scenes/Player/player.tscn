@@ -1,11 +1,40 @@
-[gd_scene load_steps=13 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=17 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_ysrji"]
-[ext_resource type="Texture2D" uid="uid://dvti5pt1ha2b2" path="res://Assets/Sprites/ships_human.png" id="2_lsjj1"]
+[ext_resource type="Texture2D" uid="uid://b700d46as0106" path="res://Assets/Sprites/Sprite-player_dodge_01.png" id="2_t56qb"]
 [ext_resource type="AudioStream" uid="uid://b575tqygiclj5" path="res://Assets/SFX/sfx_exp_shortest_soft2.wav" id="3_pi67o"]
+[ext_resource type="Texture2D" uid="uid://dvb28t778jgq" path="res://Assets/Sprites/Sprite-player_dodge_02.png" id="3_y2rdm"]
 [ext_resource type="AudioStream" uid="uid://ct54lt5a64itw" path="res://Assets/SFX/sfx_exp_short_hard5.wav" id="4_s4u0r"]
 [ext_resource type="AudioStream" uid="uid://dl8u712s2yis6" path="res://Assets/SFX/sfx_PlayerHit.wav" id="5_42bcp"]
 [ext_resource type="PackedScene" uid="uid://b2fde3mnc20fv" path="res://Scenes/Player/healthbar.tscn" id="5_eegfs"]
+[ext_resource type="Texture2D" uid="uid://b6k3w6vnl2f02" path="res://Assets/Sprites/Sprite-player_idle01.png" id="7_7nrvr"]
+[ext_resource type="Texture2D" uid="uid://e313qrh2qnoi" path="res://Assets/Sprites/Sprite-player_idle02.png" id="8_6ydxw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hppht"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_t56qb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_y2rdm")
+}],
+"loop": true,
+"name": &"dodge",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_7nrvr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_6ydxw")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4nfi"]
 height = 48.0
@@ -37,10 +66,12 @@ point_count = 3
 rotation = 0.00418758
 script = ExtResource("1_ysrji")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_lsjj1")
-region_enabled = true
-region_rect = Rect2(0, 1104, 32, 48)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_hppht")
+animation = &"dodge"
+autoplay = "idle"
+frame = 1
+frame_progress = 0.711137
 
 [node name="Hurtbox" type="Area2D" parent="."]
 
@@ -164,11 +195,6 @@ radial_accel_min = -100.0
 radial_accel_max = -100.0
 radial_accel_curve = SubResource("Curve_qtl5h")
 color = Color(0.924349, 0.975658, 1, 1)
-
-[node name="DodgingSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_lsjj1")
-region_enabled = true
-region_rect = Rect2(64, 1104, 32, 48)
 
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]

@@ -24,12 +24,11 @@ extends CharacterBody2D
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
 @onready var damage_flicker_timer: Timer = $DamageFlicker_Timer
 @onready var dodge_timer: Timer = $Dodge_Timer
-@onready var dodging_sprite: Sprite2D = $DodgingSprite
 @onready var dodge_cooldown_timer: Timer = $DodgeCooldown_Timer
 @onready var supercharge_timer: Timer = $Supercharge_Timer
 @onready var debuff_timer: Timer = $Debuff_Timer
 @onready var screen_shake_timer: Timer = $ScreenShake_Timer
-@onready var sprite: Sprite2D = $Sprite2D
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var primary_muzzle_light: PointLight2D = $Primary_MuzzleLight
 @onready var primary_fire_muzzle_flash_timer: Timer = $PrimaryFire_MuzzleFlash_Timer
 @onready var supercharge_particles_1: CPUParticles2D = $Supercharge_Particles1
@@ -210,12 +209,12 @@ func flicker_red() -> void:
 	is_taking_damage = true
 	on_player_damage_sound.play()
 	ScoreManager.substract_points(20)
-	sprite.modulate = Color(1, 0, 0)  # Set sprite color to red
+	animated_sprite.modulate = Color(1, 0, 0)  # Set sprite color to red
 	damage_flicker_timer.start()  # Start the timer to reset the color
 	
 # Reset the sprite's color to normal when the timer times out
 func _on_DamageFeedbackTimer_timeout() -> void:
-	sprite.modulate = Color(1, 1, 1)  # Revert the sprite color to normal
+	animated_sprite.modulate = Color(1, 1, 1)  # Revert the sprite color to normal
 	is_taking_damage = false
 
 # Shake screen on damage taken
@@ -252,7 +251,17 @@ func dodge() -> void:
 		can_fire = false  # Disable firing
 		velocity = last_direction * DODGE_SPEED  # Apply dodge velocity
 		make_invulnerable(true)  # Enable invulnerability
+		
+		 # Flip the sprite based on dodge direction
+		if last_direction.x > 0:  # Dodging to the right
+			animated_sprite.flip_h = true
+		elif last_direction.x < 0:  # Dodging to the left
+			animated_sprite.flip_h = false
+		
 		dodge_timer.start(DODGE_TIME)  # Start dodge duration timer
+		
+		# Play the dodge animation
+		animated_sprite.play("dodge")
 	
 		# Start the dodge cooldown timer
 		dodge_timer.start(DODGE_TIME)
@@ -267,6 +276,10 @@ func _on_Dodge_Timer_timeout() -> void:
 	is_dodging = false
 	can_fire = true
 	make_invulnerable(false)
+	
+	# Reset to the idle animation
+	animated_sprite.flip_h = false  # Default to no flip
+	animated_sprite.play("idle")
 
 func _on_DodgeCooldown_Timer_timeout() -> void:
 	# Logic to re-enable dodge will go here
