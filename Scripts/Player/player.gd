@@ -19,18 +19,23 @@ extends CharacterBody2D
 @onready var health_bar: ProgressBar = $Healthbar
 @onready var primary_firing_sound: AudioStreamPlayer2D = $Primary_FiringSound
 @onready var secondary_firing_sound: AudioStreamPlayer2D = $Secondary_FiringSound
+@onready var on_player_damage_sound: AudioStreamPlayer2D = $OnPlayerDamage_Sound
 @onready var primary_fire_timer: Timer = $PrimaryFire_Timer
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
+@onready var damage_flicker_timer: Timer = $DamageFlicker_Timer
 @onready var dodge_timer: Timer = $Dodge_Timer
 @onready var dodge_cooldown_timer: Timer = $DodgeCooldown_Timer
 @onready var supercharge_timer: Timer = $Supercharge_Timer
-
+@onready var debuff_timer: Timer = $Debuff_Timer
+@onready var screen_shake_timer: Timer = $ScreenShake_Timer
+@onready var sprite: Sprite2D = $Sprite2D
 @onready var primary_muzzle_light: PointLight2D = $Primary_MuzzleLight
 @onready var primary_fire_muzzle_flash_timer: Timer = $PrimaryFire_MuzzleFlash_Timer
 @onready var supercharge_particles_1: CPUParticles2D = $Supercharge_Particles1
 @onready var supercharge_particles_2: CPUParticles2D = $Supercharge_Particles1/Supercharge_Particles2
-
-
+@onready var camera_2d: Camera2D = $Camera2D
+@onready var debuff_particles_1: CPUParticles2D = $Debuff_Particles1
+@onready var debuff_particles_2: CPUParticles2D = $Debuff_Particles1/Debuff_Particles2
 
 
 # Boolean flags
@@ -40,10 +45,18 @@ var can_secondary_fire: bool = true
 var is_dead: bool = false # <= future implementation of a death mechanic (only needs a death animation now)
 var is_dodging: bool = false # Track dodge state
 var is_supercharged: bool = false # Track the supercharged state
+var is_downcharged: bool = false
+var is_taking_damage: bool = true
+var is_shaking: bool = false
 
 # Key Player Variables
 var health: int
 var last_direction: Vector2 = Vector2.UP  # Default direction (forward)
+var shake_intensity: float = 7.5 # Maximum screen shake offset in pixels
+var shake_duration: float = 0.1  # Total duration of the shake in seconds
+
+# Signals
+signal player_death_complete
 
 func _ready() -> void:
 	health = MAX_HP
@@ -60,7 +73,7 @@ func _physics_process(_delta: float) -> void:
 		return
 	
 	# Initialize the movement direction vector
-	var direction = Vector2.ZERO	
+	var direction = Vector2.ZERO
 	# Capture movement inputs for all directions
 	direction.x = Input.get_axis("ui_left", "ui_right")
 	direction.y = Input.get_axis("ui_up", "ui_down")
@@ -73,6 +86,14 @@ func _physics_process(_delta: float) -> void:
 	velocity = direction * SPEED	
 	# Apply the movement
 	move_and_slide()
+	
+	# Check for screen shake & apply random offsets if the screen is shaking
+	if is_shaking:
+		var random_offset = Vector2(
+			randf_range(-shake_intensity, shake_intensity),
+			randf_range(-shake_intensity, shake_intensity)
+		)
+		camera_2d.offset = random_offset
 	
 	# Check for player fire
 	if can_fire:
@@ -179,12 +200,46 @@ func take_damage(damage_amount: int):
 	#
 	if health <= 0:
 		die()
+	else :
+		flicker_red()
+		shake_screen()
+
+# Flicker the player red and they take damage
+func flicker_red() -> void:
+	is_taking_damage = true
+	on_player_damage_sound.play()
+	ScoreManager.substract_points(20)
+	sprite.modulate = Color(1, 0, 0)  # Set sprite color to red
+	damage_flicker_timer.start()  # Start the timer to reset the color
+	
+# Reset the sprite's color to normal when the timer times out
+func _on_DamageFeedbackTimer_timeout() -> void:
+	sprite.modulate = Color(1, 1, 1)  # Revert the sprite color to normal
+	is_taking_damage = false
+
+# Shake screen on damage taken
+func shake_screen() -> void:
+	if is_shaking:
+		return # To avoid overlapping shakes
+	is_shaking = true
+	screen_shake_timer.start(shake_duration)
+
+func _on_ScreenShakeTimer_timeout() -> void:
+	# Stop shaking and reset the camera offset
+	is_shaking = false
+	camera_2d.offset = Vector2.ZERO
 
 # Kill the player
 func die() -> void:
 	is_dead = true
-	#ap.play("death") <= future implementation of a death animation when the proper sprites are collected
-
+	# $DeathAnimationPlayer.play("death") <= future implementation of a death animation when the proper sprites are collected
+	# $DeathAudioPlayer.play()
+	# await $DeathAnimationPlayer.animation_finished
+	print("Player death animation.")
+	
+	# Emit signal when death process is complete
+	emit_signal("player_death_complete")
+	print("Player death signal.")
 # -------------------------------------- Dodge Logic Start ---------------------------------------------- #
 
 func dodge() -> void:
@@ -253,3 +308,34 @@ func _on_supercharge_timer_Timeout() -> void:
 	# Disable supercharged visuals
 	supercharge_particles_1.emitting = false
 	supercharge_particles_2.emitting = false
+
+func apply_supercharge_debuff(duration: float) -> void:
+	if is_downcharged:
+		return # Avoid stacking the buff
+	
+	is_downcharged = true
+	
+	# Double firerate and damage
+	PRIMARY_SHOOTING_SPEED *= SUPERCHARGE_MULTIPLIER
+	SECONDARY_SHOOTING_SPEED *= SUPERCHARGE_MULTIPLIER	
+	
+	# Enable supercharged visuals
+	debuff_particles_1.emitting = true
+	debuff_particles_2.emitting = true
+	
+	# Start the buff timer
+	debuff_timer.start(duration)
+
+func _on_Debuff_Timer_Timeout() -> void:
+	# Remove the buff after the timeout
+	is_downcharged = false
+	
+	# Restore original damage values
+	PRIMARY_SHOOTING_SPEED /= SUPERCHARGE_MULTIPLIER
+	SECONDARY_SHOOTING_SPEED /= SUPERCHARGE_MULTIPLIER
+
+	
+	# Disable supercharged visuals
+	debuff_particles_1.emitting = false
+	debuff_particles_2.emitting = false
+# ------------------------------------- Buff or Debuff Logic End --------------------------------------- #

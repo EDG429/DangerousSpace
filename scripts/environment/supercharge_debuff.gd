@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var duration: float = 20.0  # Buff duration in seconds
+@export var duration: float = 20.0  # Debuff duration in seconds
 
 @onready var pickup_sound: AudioStreamPlayer2D = $PickupSound
 @onready var sprite_2d: Sprite2D = $Sprite2D
@@ -18,14 +18,14 @@ func _process(delta: float) -> void:
 	pass
 
 func _on_body_entered(body: Node) -> void:
-	
 	if body is Player and sprite_2d.visible:
-		body.apply_supercharge_buff(duration)  # Apply the buff to the player		
-		pickup_sound.play() 
-		ScoreManager.add_points(50)
+		body.apply_supercharge_debuff(duration)  # Apply the buff to the player		
+		pickup_sound.play()
+		ScoreManager.substract_points(50)
 		sprite_2d.visible = false
 		cpu_particles_2d_2.emitting = false
 		cpu_particles_2d.emitting = false
 		collision_shape_2d.disabled
 		await pickup_sound.finished
 		queue_free()  # Remove the pickup object
+		

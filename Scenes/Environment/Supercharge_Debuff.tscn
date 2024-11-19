@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmn6nqhf74w28"]
+
+[ext_resource type="Script" path="res://scripts/environment/supercharge_debuff.gd" id="1_4n1iu"]
+[ext_resource type="Texture2D" uid="uid://6awtc6po1j20" path="res://Assets/Sprites/00 - Copie.png" id="2_mon30"]
+[ext_resource type="AudioStream" uid="uid://dd1tsutty8unj" path="res://Assets/SFX/debuff_applied_SFX.mp3" id="3_wjskm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhwjq"]
+
+[sub_resource type="Curve" id="Curve_0v4tm"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.578947, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="Debuff" type="Area2D"]
+script = ExtResource("1_4n1iu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_mon30")
+region_enabled = true
+region_rect = Rect2(135, 135, 18, 17)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mhwjq")
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="."]
+amount = 50
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 43.66
+spread = 119.55
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("Curve_0v4tm")
+color = Color(1, 0, 0, 1)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 50
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 43.66
+spread = 119.55
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("Curve_0v4tm")
+color = Color(0.924349, 0.975658, 1, 1)
+
+[node name="PickupSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_wjskm")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

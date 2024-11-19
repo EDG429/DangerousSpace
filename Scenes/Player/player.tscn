@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=13 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_ysrji"]
 [ext_resource type="Texture2D" uid="uid://dvti5pt1ha2b2" path="res://Assets/Sprites/ships_human.png" id="2_lsjj1"]
 [ext_resource type="AudioStream" uid="uid://b575tqygiclj5" path="res://Assets/SFX/sfx_exp_shortest_soft2.wav" id="3_pi67o"]
 [ext_resource type="AudioStream" uid="uid://ct54lt5a64itw" path="res://Assets/SFX/sfx_exp_short_hard5.wav" id="4_s4u0r"]
+[ext_resource type="AudioStream" uid="uid://dl8u712s2yis6" path="res://Assets/SFX/sfx_PlayerHit.wav" id="5_42bcp"]
 [ext_resource type="PackedScene" uid="uid://b2fde3mnc20fv" path="res://Scenes/Player/healthbar.tscn" id="5_eegfs"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4nfi"]
@@ -36,7 +37,7 @@ point_count = 3
 rotation = 0.00418758
 script = ExtResource("1_ysrji")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_lsjj1")
 region_enabled = true
 region_rect = Rect2(0, 1104, 32, 48)
@@ -64,6 +65,17 @@ one_shot = true
 [node name="Supercharge_Timer" type="Timer" parent="."]
 one_shot = true
 
+[node name="Debuff_Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="DamageFlicker_Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="ScreenShake_Timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
 [node name="MuzzleFlash" type="CPUParticles2D" parent="."]
 position = Vector2(0.012306, -24)
 emitting = false
@@ -79,6 +91,9 @@ volume_db = -6.0
 [node name="Secondary_FiringSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_s4u0r")
 volume_db = -20.0
+
+[node name="OnPlayerDamage_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_42bcp")
 
 [node name="Primary_MuzzleLight" type="PointLight2D" parent="."]
 position = Vector2(0.0117932, -23)
@@ -128,9 +143,36 @@ radial_accel_max = -100.0
 radial_accel_curve = SubResource("Curve_qtl5h")
 color = Color(0.924349, 0.975658, 1, 1)
 
+[node name="Debuff_Particles1" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 50
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 43.66
+spread = 119.55
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("Curve_1u8r6")
+color = Color(1, 0, 0, 1)
+
+[node name="Debuff_Particles2" type="CPUParticles2D" parent="Debuff_Particles1"]
+emitting = false
+amount = 50
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 43.66
+spread = 119.55
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("Curve_qtl5h")
+color = Color(0.924349, 0.975658, 1, 1)
+
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]
 [connection signal="timeout" from="Dodge_Timer" to="." method="_on_Dodge_Timer_timeout"]
 [connection signal="timeout" from="DodgeCooldown_Timer" to="." method="_on_DodgeCooldown_Timer_timeout"]
 [connection signal="timeout" from="Supercharge_Timer" to="." method="_on_supercharge_timer_Timeout"]
+[connection signal="timeout" from="Debuff_Timer" to="." method="_on_Debuff_Timer_Timeout"]
+[connection signal="timeout" from="DamageFlicker_Timer" to="." method="_on_DamageFeedbackTimer_timeout"]
+[connection signal="timeout" from="ScreenShake_Timer" to="." method="_on_ScreenShakeTimer_timeout"]
 [connection signal="timeout" from="PrimaryFire_MuzzleFlash_Timer" to="." method="_on_PrimaryFire_MuzzleFlashTimer_timeout"]
