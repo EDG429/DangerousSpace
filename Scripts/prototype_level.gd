@@ -11,6 +11,7 @@ const player_scene = preload("res://Scenes/Player/player.tscn")
 @export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 20.0
 @export var SUPERCHARGE_BUFF_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
 @export var SUPERCHARGE_BUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Buff.tscn")
+@export var DEBUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Debuff.tscn")
 @export var DEADLINE_MOVE_OFFSET: float = 50.0  # Pixels to move upwards
 
 
@@ -72,7 +73,7 @@ func _process(_delta: float) -> void:
 		player.position.y = clamp(player.position.y, 25 -LNG/2, LNG/2 - 25)      # Vertical clamping
 	
 
-# ---------------------- Buff Spawning Logic Start -------------------------------------- #
+# ---------------------- Buff and Debuff Spawning Logic Start -------------------------------------- #
 func spawn_supercharge_buff() -> void:
 	if not player:
 		return # Need player to spawn
@@ -95,10 +96,33 @@ func spawn_supercharge_buff() -> void:
 	add_child(supercharge_buff)
 	supercharge_buff.global_position = spawn_position
 
+func spawn_supercharge_debuff() -> void:
+	if not player:
+		return # Need player to spawn
+	
+	# Fetch the player's current position
+	var player_current_position = player.global_position
+	
+	# Generate in a random position around the player
+	var spawn_x = player_current_position.x + randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS)
+	var spawn_y = - player_current_position.y + randf_range(- 80, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
+	
+	# Clamp the spawn position to ensure it remains within background bounds
+	spawn_x = clamp(spawn_x, -SIDE, SIDE)  # Clamp X to stay within left/right bounds
+	spawn_y = clamp(spawn_y, player_current_position.y - 80, LNG / 2)  # Clamp Y to stay forward and within bounds
+	
+	var spawn_position = Vector2(spawn_x, spawn_y)
+	
+	# Instance the Supercharge Buff and add it to the scene
+	var supercharge_debuff = DEBUFF_SCENE.instantiate()
+	add_child(supercharge_debuff)
+	supercharge_debuff.global_position = spawn_position
+
 func _on_SuperchargeSpawn_Timer_timeout() -> void:
 	spawn_supercharge_buff()
+	spawn_supercharge_debuff()
 
-# ---------------------- Buff Spawning Logic End  -------------------------------------- #
+# ---------------------- Buff and Debuff Spawning Logic End  -------------------------------------- #
 
 # ---------------------- Deadline Moving Logic Start ----------------------------------- #
 func _on_Deadline_Move_Timer_timeout() -> void:
