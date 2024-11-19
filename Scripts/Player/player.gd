@@ -26,6 +26,7 @@ extends CharacterBody2D
 @onready var dodge_timer: Timer = $Dodge_Timer
 @onready var dodge_cooldown_timer: Timer = $DodgeCooldown_Timer
 @onready var supercharge_timer: Timer = $Supercharge_Timer
+@onready var debuff_timer: Timer = $Debuff_Timer
 @onready var screen_shake_timer: Timer = $ScreenShake_Timer
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var primary_muzzle_light: PointLight2D = $Primary_MuzzleLight
@@ -33,8 +34,8 @@ extends CharacterBody2D
 @onready var supercharge_particles_1: CPUParticles2D = $Supercharge_Particles1
 @onready var supercharge_particles_2: CPUParticles2D = $Supercharge_Particles1/Supercharge_Particles2
 @onready var camera_2d: Camera2D = $Camera2D
-
-
+@onready var debuff_particles_1: CPUParticles2D = $Debuff_Particles1
+@onready var debuff_particles_2: CPUParticles2D = $Debuff_Particles1/Debuff_Particles2
 
 
 # Boolean flags
@@ -44,6 +45,7 @@ var can_secondary_fire: bool = true
 var is_dead: bool = false # <= future implementation of a death mechanic (only needs a death animation now)
 var is_dodging: bool = false # Track dodge state
 var is_supercharged: bool = false # Track the supercharged state
+var is_downcharged: bool = false
 var is_taking_damage: bool = true
 var is_shaking: bool = false
 
@@ -71,7 +73,7 @@ func _physics_process(_delta: float) -> void:
 		return
 	
 	# Initialize the movement direction vector
-	var direction = Vector2.ZERO	
+	var direction = Vector2.ZERO
 	# Capture movement inputs for all directions
 	direction.x = Input.get_axis("ui_left", "ui_right")
 	direction.y = Input.get_axis("ui_up", "ui_down")
@@ -307,4 +309,33 @@ func _on_supercharge_timer_Timeout() -> void:
 	supercharge_particles_1.emitting = false
 	supercharge_particles_2.emitting = false
 
+func apply_supercharge_debuff(duration: float) -> void:
+	if is_downcharged:
+		return # Avoid stacking the buff
+	
+	is_downcharged = true
+	
+	# Double firerate and damage
+	PRIMARY_SHOOTING_SPEED *= SUPERCHARGE_MULTIPLIER
+	SECONDARY_SHOOTING_SPEED *= SUPERCHARGE_MULTIPLIER	
+	
+	# Enable supercharged visuals
+	debuff_particles_1.emitting = true
+	debuff_particles_2.emitting = true
+	
+	# Start the buff timer
+	debuff_timer.start(duration)
+
+func _on_Debuff_Timer_Timeout() -> void:
+	# Remove the buff after the timeout
+	is_downcharged = false
+	
+	# Restore original damage values
+	PRIMARY_SHOOTING_SPEED /= SUPERCHARGE_MULTIPLIER
+	SECONDARY_SHOOTING_SPEED /= SUPERCHARGE_MULTIPLIER
+
+	
+	# Disable supercharged visuals
+	debuff_particles_1.emitting = false
+	debuff_particles_2.emitting = false
 # ------------------------------------- Buff or Debuff Logic End --------------------------------------- #
