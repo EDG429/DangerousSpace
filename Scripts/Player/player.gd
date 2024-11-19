@@ -19,17 +19,20 @@ extends CharacterBody2D
 @onready var health_bar: ProgressBar = $Healthbar
 @onready var primary_firing_sound: AudioStreamPlayer2D = $Primary_FiringSound
 @onready var secondary_firing_sound: AudioStreamPlayer2D = $Secondary_FiringSound
+@onready var on_player_damage_sound: AudioStreamPlayer2D = $OnPlayerDamage_Sound
 @onready var primary_fire_timer: Timer = $PrimaryFire_Timer
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
 @onready var damage_flicker_timer: Timer = $DamageFlicker_Timer
 @onready var dodge_timer: Timer = $Dodge_Timer
 @onready var dodge_cooldown_timer: Timer = $DodgeCooldown_Timer
 @onready var supercharge_timer: Timer = $Supercharge_Timer
+@onready var screen_shake_timer: Timer = $ScreenShake_Timer
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var primary_muzzle_light: PointLight2D = $Primary_MuzzleLight
 @onready var primary_fire_muzzle_flash_timer: Timer = $PrimaryFire_MuzzleFlash_Timer
 @onready var supercharge_particles_1: CPUParticles2D = $Supercharge_Particles1
 @onready var supercharge_particles_2: CPUParticles2D = $Supercharge_Particles1/Supercharge_Particles2
+@onready var camera_2d: Camera2D = $Camera2D
 
 
 
@@ -42,10 +45,13 @@ var is_dead: bool = false # <= future implementation of a death mechanic (only n
 var is_dodging: bool = false # Track dodge state
 var is_supercharged: bool = false # Track the supercharged state
 var is_taking_damage: bool = true
+var is_shaking: bool = false
 
 # Key Player Variables
 var health: int
 var last_direction: Vector2 = Vector2.UP  # Default direction (forward)
+var shake_intensity: float = 7.5 # Maximum screen shake offset in pixels
+var shake_duration: float = 0.1  # Total duration of the shake in seconds
 
 # Signals
 signal player_death_complete
@@ -78,6 +84,14 @@ func _physics_process(_delta: float) -> void:
 	velocity = direction * SPEED	
 	# Apply the movement
 	move_and_slide()
+	
+	# Check for screen shake & apply random offsets if the screen is shaking
+	if is_shaking:
+		var random_offset = Vector2(
+			randf_range(-shake_intensity, shake_intensity),
+			randf_range(-shake_intensity, shake_intensity)
+		)
+		camera_2d.offset = random_offset
 	
 	# Check for player fire
 	if can_fire:
@@ -186,10 +200,12 @@ func take_damage(damage_amount: int):
 		die()
 	else :
 		flicker_red()
+		shake_screen()
 
 # Flicker the player red and they take damage
 func flicker_red() -> void:
 	is_taking_damage = true
+	on_player_damage_sound.play()
 	ScoreManager.substract_points(20)
 	sprite.modulate = Color(1, 0, 0)  # Set sprite color to red
 	damage_flicker_timer.start()  # Start the timer to reset the color
@@ -198,6 +214,18 @@ func flicker_red() -> void:
 func _on_DamageFeedbackTimer_timeout() -> void:
 	sprite.modulate = Color(1, 1, 1)  # Revert the sprite color to normal
 	is_taking_damage = false
+
+# Shake screen on damage taken
+func shake_screen() -> void:
+	if is_shaking:
+		return # To avoid overlapping shakes
+	is_shaking = true
+	screen_shake_timer.start(shake_duration)
+
+func _on_ScreenShakeTimer_timeout() -> void:
+	# Stop shaking and reset the camera offset
+	is_shaking = false
+	camera_2d.offset = Vector2.ZERO
 
 # Kill the player
 func die() -> void:

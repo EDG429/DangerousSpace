@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cf5fsjlg3bijt"]
+[gd_scene load_steps=5 format=3 uid="uid://cf5fsjlg3bijt"]
 
 [ext_resource type="Texture2D" uid="uid://b243wxpqsmc3q" path="res://Assets/Sprites/ships_asteroids.png" id="1_6civg"]
 [ext_resource type="Script" path="res://scripts/environment/Asteroid.gd" id="2_ni7y6"]
+[ext_resource type="AudioStream" uid="uid://dsbyo34s8oeud" path="res://Assets/SFX/sfx_damage_AsteroidHit.wav" id="3_aue8w"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_20ypo"]
 radius = 25.1794
@@ -20,8 +21,12 @@ MAX_HP = 200
 shape = SubResource("CircleShape2D_20ypo")
 
 [node name="DamageFeedback_Timer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.05
 one_shot = true
+
+[node name="AsteroidHit_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_aue8w")
+volume_db = -5.0
 
 [connection signal="area_entered" from="Hitbox" to="." method="_on_Asteroid_body_entered"]
 [connection signal="body_entered" from="Hitbox" to="." method="_on_Asteroid_body_entered"]

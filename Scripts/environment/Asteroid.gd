@@ -7,6 +7,7 @@ extends Sprite2D
 
 @onready var asteroid: Asteroid = $"."
 @onready var damage_feedback_timer: Timer = $DamageFeedback_Timer
+@onready var asteroid_hit_sound: AudioStreamPlayer2D = $AsteroidHit_Sound
 
 var is_taking_damage: bool = false
 
@@ -40,6 +41,7 @@ func take_damage(damage_amount: int):
 
 func flicker() -> void:
 	is_taking_damage = true
+	asteroid_hit_sound.play()
 	asteroid.modulate = Color(1, 0, 0) # Flicker to red
 	damage_feedback_timer.start()
 
