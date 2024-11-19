@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bjsq7k18gn6py"]
+[gd_scene load_steps=6 format=3 uid="uid://cmn6nqhf74w28"]
 
 [ext_resource type="Script" path="res://scripts/environment/supercharge_debuff.gd" id="1_4n1iu"]
 [ext_resource type="Texture2D" uid="uid://6awtc6po1j20" path="res://Assets/Sprites/00 - Copie.png" id="2_mon30"]

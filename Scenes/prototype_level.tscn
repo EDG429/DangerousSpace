@@ -3,11 +3,11 @@
 [ext_resource type="Script" path="res://scripts/prototype_level.gd" id="1_rjitg"]
 [ext_resource type="PackedScene" uid="uid://b3sfski2sjvr7" path="res://Scenes/ScoreLabel.tscn" id="2_hxdoa"]
 [ext_resource type="Texture2D" uid="uid://dbkgct53y2mi4" path="res://Assets/Backgrounds/Stage1.png" id="2_w7jkh"]
-[ext_resource type="PackedScene" uid="uid://cf5fsjlg3bijt" path="res://Scenes/Environment/destructible_asteroid.tscn" id="3_e6lov"]
+[ext_resource type="PackedScene" uid="uid://cl1tend7gsp65" path="res://Scenes/Environment/destructible_asteroid.tscn" id="3_e6lov"]
 [ext_resource type="PackedScene" uid="uid://uld8474mocbo" path="res://Scenes/Environment/Supercharge_Buff.tscn" id="4_7ie2g"]
 [ext_resource type="PackedScene" uid="uid://8e7x38lhgn60" path="res://Scenes/Environment/deadline.tscn" id="5_x2l07"]
 [ext_resource type="Texture2D" uid="uid://b243wxpqsmc3q" path="res://Assets/Sprites/ships_asteroids.png" id="7_0kqip"]
-[ext_resource type="PackedScene" uid="uid://bjsq7k18gn6py" path="res://Scenes/Environment/Supercharge_Debuff.tscn" id="8_4s3hh"]
+[ext_resource type="PackedScene" uid="uid://cmn6nqhf74w28" path="res://Scenes/Environment/Supercharge_Debuff.tscn" id="8_4s3hh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xw1nj"]
 texture = ExtResource("7_0kqip")
@@ -617,6 +617,8 @@ position = Vector2(-94, 6990)
 wait_time = 3.0
 autostart = true
 
+[node name="AsteroidSpawn_Timer" type="Timer" parent="."]
+
 [node name="Deadline" parent="." instance=ExtResource("5_x2l07")]
 position = Vector2(31, 7504)
 
@@ -628,3 +630,4 @@ position = Vector2(242, 6985)
 
 [connection signal="timeout" from="SuperchargeSpawn_Timer" to="." method="_on_SuperchargeSpawn_Timer_timeout"]
 [connection signal="timeout" from="Deadline_Move_Timer" to="." method="_on_Deadline_Move_Timer_timeout"]
+[connection signal="timeout" from="AsteroidSpawn_Timer" to="." method="_on_AsteroidSpawn_Timer_timeout"]
