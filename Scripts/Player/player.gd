@@ -20,6 +20,7 @@ extends CharacterBody2D
 @onready var primary_firing_sound: AudioStreamPlayer2D = $Primary_FiringSound
 @onready var secondary_firing_sound: AudioStreamPlayer2D = $Secondary_FiringSound
 @onready var on_player_damage_sound: AudioStreamPlayer2D = $OnPlayerDamage_Sound
+@onready var on_player_death_sound: AudioStreamPlayer2D = $OnPlayerDeath_Sound
 @onready var primary_fire_timer: Timer = $PrimaryFire_Timer
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
 @onready var damage_flicker_timer: Timer = $DamageFlicker_Timer
@@ -36,6 +37,7 @@ extends CharacterBody2D
 @onready var camera_2d: Camera2D = $Camera2D
 @onready var debuff_particles_1: CPUParticles2D = $Debuff_Particles1
 @onready var debuff_particles_2: CPUParticles2D = $Debuff_Particles1/Debuff_Particles2
+
 
 
 # Boolean flags
@@ -233,16 +235,12 @@ func _on_ScreenShakeTimer_timeout() -> void:
 # Kill the player
 func die() -> void:
 	animated_sprite.play("death")
-	
+	on_player_death_sound.play()
 	 # Play the death audio
-	# $DeathAudioPlayer.play()
-	
-	# Calculate the length of the death animation
-	var animation_frames: int = 10
-	var animation_duration = animation_frames / animated_sprite.speed_scale  # Calculate the duration
+	# $DeathAudioPlayer.play()	
 	
 	# Wait for the animation to finish
-	await get_tree().create_timer(3).timeout
+	await get_tree().create_timer(5).timeout
 	print("Player death animation.")
 	is_dead = true
 	# Emit signal when death process is complete

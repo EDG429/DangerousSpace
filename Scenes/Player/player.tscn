@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=28 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_ysrji"]
 [ext_resource type="Texture2D" uid="uid://b700d46as0106" path="res://Assets/Sprites/Sprite-player_dodge_01.png" id="2_t56qb"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://dbvsagaaltblg" path="res://Assets/Sprites/player_death_animation/Sprite-player_death08.png" id="9_8dd4r"]
 [ext_resource type="Texture2D" uid="uid://ch4wtnqxkagph" path="res://Assets/Sprites/player_death_animation/Sprite-player_death09.png" id="10_utxt3"]
 [ext_resource type="Texture2D" uid="uid://bj4jcehc4paem" path="res://Assets/Sprites/player_death_animation/Sprite-player_death10.png" id="11_g4oj5"]
+[ext_resource type="AudioStream" uid="uid://beldaubumc3dx" path="res://Assets/SFX/sfx_exp_PlayerDeath.wav" id="19_kw3no"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hppht"]
 resource_local_to_scene = true
@@ -168,6 +169,9 @@ volume_db = -20.0
 
 [node name="OnPlayerDamage_Sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_42bcp")
+
+[node name="OnPlayerDeath_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("19_kw3no")
 
 [node name="Primary_MuzzleLight" type="PointLight2D" parent="."]
 position = Vector2(0.0117932, -23)
