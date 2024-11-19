@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=30 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_ysrji"]
 [ext_resource type="Texture2D" uid="uid://b700d46as0106" path="res://Assets/Sprites/Sprite-player_dodge_01.png" id="2_t56qb"]
@@ -20,6 +20,8 @@
 [ext_resource type="Texture2D" uid="uid://ch4wtnqxkagph" path="res://Assets/Sprites/player_death_animation/Sprite-player_death09.png" id="10_utxt3"]
 [ext_resource type="Texture2D" uid="uid://bj4jcehc4paem" path="res://Assets/Sprites/player_death_animation/Sprite-player_death10.png" id="11_g4oj5"]
 [ext_resource type="AudioStream" uid="uid://beldaubumc3dx" path="res://Assets/SFX/sfx_exp_PlayerDeath.wav" id="19_kw3no"]
+[ext_resource type="AudioStream" uid="uid://d0ji1ekt6xd2x" path="res://Assets/SFX/sfx_OnDodge.wav" id="20_0fcad"]
+[ext_resource type="AudioStream" uid="uid://dhdqdnc8r02ko" path="res://Assets/SFX/sfx_CannotDodge.wav" id="21_63i8l"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hppht"]
 resource_local_to_scene = true
@@ -172,6 +174,14 @@ stream = ExtResource("5_42bcp")
 
 [node name="OnPlayerDeath_Sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("19_kw3no")
+
+[node name="OnPlayerDodge_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("20_0fcad")
+volume_db = -18.0
+
+[node name="CannotDodge_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("21_63i8l")
+volume_db = -5.0
 
 [node name="Primary_MuzzleLight" type="PointLight2D" parent="."]
 position = Vector2(0.0117932, -23)

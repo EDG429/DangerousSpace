@@ -11,7 +11,7 @@ func add_points(points: int) -> void:
 
 func substract_points(points: int) -> void:
 	score -= points
-	print("Points added: ", points, " | Current Score: ", score)
+	print("Points substracted: ", points, " | Current Score: ", score)
 	emit_signal("score_changed", score)
 
 func reset_score() -> void:

@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 			queue_free()
 
 func _on_body_entered(body: Node) -> void:
-	print(self, " has collided with ",body.name )
+	#print(self, " has collided with ",body.name )
 	
 	# Handle collision with an enemy
 	if body.has_method("take_damage") and body.name != "Player":

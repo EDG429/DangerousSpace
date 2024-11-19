@@ -5,7 +5,7 @@ extends CharacterBody2D
 @export var SPEED: float = 300.0  # Movement speed of the spaceship
 @export var MAX_HP: int = 100    # Maximum hit points of the player
 @export var DODGE_SPEED: float = 500.0  # Speed boost when dodging
-@export var DODGE_DISTANCE: float = 10.0  # Distanced traveled while dodging
+@export var DODGE_DISTANCE: float = 25.0  # Distanced traveled while dodging
 @export var DODGE_TIME: float = 0.25  # Duration of dodge in seconds
 @export var DODGE_COOLDOWN: float = 2.0  # Cooldown duration in seconds
 @export var PRIMARY_SHOOTING_SPEED: float = 0.075 # Shooting cooldown in seconds
@@ -21,6 +21,8 @@ extends CharacterBody2D
 @onready var secondary_firing_sound: AudioStreamPlayer2D = $Secondary_FiringSound
 @onready var on_player_damage_sound: AudioStreamPlayer2D = $OnPlayerDamage_Sound
 @onready var on_player_death_sound: AudioStreamPlayer2D = $OnPlayerDeath_Sound
+@onready var on_player_dodge_sound: AudioStreamPlayer2D = $OnPlayerDodge_Sound
+@onready var cannot_dodge_sound: AudioStreamPlayer2D = $CannotDodge_Sound
 @onready var primary_fire_timer: Timer = $PrimaryFire_Timer
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
 @onready var damage_flicker_timer: Timer = $DamageFlicker_Timer
@@ -128,6 +130,7 @@ func _on_PrimaryFire_MuzzleFlashTimer_timeout() -> void:
 func Primary_Fire() -> void:
 	can_primary_fire = false
 	print("shots fired! Primary Fire")
+	LogManager.add_log_message("Testing log messages programmatically!")
 	# Enable Muzzle Light
 	primary_muzzle_light.global_position = global_position + Vector2(0, 24)
 	primary_muzzle_light.visible = true
@@ -236,8 +239,6 @@ func _on_ScreenShakeTimer_timeout() -> void:
 func die() -> void:
 	animated_sprite.play("death")
 	on_player_death_sound.play()
-	 # Play the death audio
-	# $DeathAudioPlayer.play()	
 	
 	# Wait for the animation to finish
 	await get_tree().create_timer(5).timeout
@@ -254,6 +255,7 @@ func dodge() -> void:
 	
 	if dodge_timer.is_stopped() and dodge_cooldown_timer.is_stopped():
 		is_dodging = true  # Start dodge
+		on_player_dodge_sound.play()
 		can_fire = false  # Disable firing
 		velocity = last_direction * DODGE_SPEED  # Apply dodge velocity
 		make_invulnerable(true)  # Enable invulnerability
@@ -277,6 +279,7 @@ func dodge() -> void:
 	
 	else:
 		print("Dodge on cooldown!")
+		cannot_dodge_sound.play()
 
 func _on_Dodge_Timer_timeout() -> void:
 	is_dodging = false

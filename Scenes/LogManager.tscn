@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://bsrc0f5dbyqtl"]
+
+[ext_resource type="Script" path="res://scripts/LogManager.gd" id="1_x5t1a"]
+
+[node name="RichTextLabel" type="RichTextLabel"]
+offset_left = 7.0
+offset_top = 712.0
+offset_right = 164.0
+offset_bottom = 941.0
+bbcode_enabled = true
+visible_characters = 0
+script = ExtResource("1_x5t1a")
