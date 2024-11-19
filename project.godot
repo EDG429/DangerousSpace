@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 ScoreManager="*res://scripts/score_manager.gd"
+Spawning="*res://addons/BulletUpHell/Spawning.tscn"
 
 [display]
 
@@ -25,6 +26,10 @@ window/size/viewport_width=768
 window/size/viewport_height=950
 window/size/resizable=false
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/BulletUpHell/plugin.cfg")
 
 [input]
 

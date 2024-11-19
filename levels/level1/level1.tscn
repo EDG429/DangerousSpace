@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://b3dv5cy4n1tmm"]
+
+[ext_resource type="Script" path="res://scripts/prototype_level.gd" id="1_qh3kp"]
+[ext_resource type="Texture2D" uid="uid://dbkgct53y2mi4" path="res://Assets/Backgrounds/Stage1.png" id="2_v4076"]
+[ext_resource type="PackedScene" uid="uid://cf5fsjlg3bijt" path="res://Scenes/Environment/asteroid_1.tscn" id="3_mm664"]
+[ext_resource type="PackedScene" uid="uid://uld8474mocbo" path="res://Scenes/Environment/Supercharge_Buff.tscn" id="4_3whm0"]
+[ext_resource type="PackedScene" uid="uid://8e7x38lhgn60" path="res://Scenes/Environment/deadline.tscn" id="5_21rtv"]
+
+[node name="level_1" type="Node2D"]
+script = ExtResource("1_qh3kp")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("2_v4076")
+
+[node name="Asteroid1" parent="." instance=ExtResource("3_mm664")]
+position = Vector2(67, 6520)
+
+[node name="Buff" parent="." instance=ExtResource("4_3whm0")]
+position = Vector2(-94, 6990)
+
+[node name="SuperchargeSpawn_Timer" type="Timer" parent="."]
+
+[node name="Deadline_Move_Timer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="Deadline" parent="." instance=ExtResource("5_21rtv")]
+position = Vector2(31, 7504)
+
+[node name="AsteroidSpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="SuperchargeSpawn_Timer" to="." method="_on_SuperchargeSpawn_Timer_timeout"]
+[connection signal="timeout" from="Deadline_Move_Timer" to="." method="_on_Deadline_Move_Timer_timeout"]
+[connection signal="timeout" from="AsteroidSpawnTimer" to="." method="_on_asteroid_spawn_timer_timeout"]
