@@ -21,10 +21,11 @@ extends CharacterBody2D
 @onready var secondary_firing_sound: AudioStreamPlayer2D = $Secondary_FiringSound
 @onready var primary_fire_timer: Timer = $PrimaryFire_Timer
 @onready var secondary_fire_timer: Timer = $SecondaryFire_Timer
+@onready var damage_flicker_timer: Timer = $DamageFlicker_Timer
 @onready var dodge_timer: Timer = $Dodge_Timer
 @onready var dodge_cooldown_timer: Timer = $DodgeCooldown_Timer
 @onready var supercharge_timer: Timer = $Supercharge_Timer
-
+@onready var sprite: Sprite2D = $Sprite2D
 @onready var primary_muzzle_light: PointLight2D = $Primary_MuzzleLight
 @onready var primary_fire_muzzle_flash_timer: Timer = $PrimaryFire_MuzzleFlash_Timer
 @onready var supercharge_particles_1: CPUParticles2D = $Supercharge_Particles1
@@ -40,6 +41,7 @@ var can_secondary_fire: bool = true
 var is_dead: bool = false # <= future implementation of a death mechanic (only needs a death animation now)
 var is_dodging: bool = false # Track dodge state
 var is_supercharged: bool = false # Track the supercharged state
+var is_taking_damage: bool = true
 
 # Key Player Variables
 var health: int
@@ -182,6 +184,20 @@ func take_damage(damage_amount: int):
 	#
 	if health <= 0:
 		die()
+	else :
+		flicker_red()
+
+# Flicker the player red and they take damage
+func flicker_red() -> void:
+	is_taking_damage = true
+	ScoreManager.substract_points(20)
+	sprite.modulate = Color(1, 0, 0)  # Set sprite color to red
+	damage_flicker_timer.start()  # Start the timer to reset the color
+	
+# Reset the sprite's color to normal when the timer times out
+func _on_DamageFeedbackTimer_timeout() -> void:
+	sprite.modulate = Color(1, 1, 1)  # Revert the sprite color to normal
+	is_taking_damage = false
 
 # Kill the player
 func die() -> void:
@@ -262,3 +278,5 @@ func _on_supercharge_timer_Timeout() -> void:
 	# Disable supercharged visuals
 	supercharge_particles_1.emitting = false
 	supercharge_particles_2.emitting = false
+
+# ------------------------------------- Buff or Debuff Logic End --------------------------------------- #

@@ -36,7 +36,7 @@ point_count = 3
 rotation = 0.00418758
 script = ExtResource("1_ysrji")
 
-[node name="Sprite" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_lsjj1")
 region_enabled = true
 region_rect = Rect2(0, 1104, 32, 48)
@@ -128,9 +128,14 @@ radial_accel_max = -100.0
 radial_accel_curve = SubResource("Curve_qtl5h")
 color = Color(0.924349, 0.975658, 1, 1)
 
+[node name="DamageFlicker_Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]
 [connection signal="timeout" from="Dodge_Timer" to="." method="_on_Dodge_Timer_timeout"]
 [connection signal="timeout" from="DodgeCooldown_Timer" to="." method="_on_DodgeCooldown_Timer_timeout"]
 [connection signal="timeout" from="Supercharge_Timer" to="." method="_on_supercharge_timer_Timeout"]
 [connection signal="timeout" from="PrimaryFire_MuzzleFlash_Timer" to="." method="_on_PrimaryFire_MuzzleFlashTimer_timeout"]
+[connection signal="timeout" from="DamageFlicker_Timer" to="." method="_on_DamageFeedbackTimer_timeout"]
