@@ -43,6 +43,7 @@ func add_log_message(message: String) -> void:
 	update_log()
 
 func update_log() -> void:
+	print("updating log")
 	# Clear the existing content of the label
 	clear()
 	

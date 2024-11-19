@@ -24,7 +24,8 @@ func _ready() -> void:
 	main_menu_button.connect("pressed", Callable(self, "_on_main_menu_pressed"))
 	
 	# Display the score from the score manager
-	score_label.text = "Your Score: %d".format(ScoreManager.get_score()) # <= Score implementation
+	var score = str(ScoreManager.get_score())
+	score_label.text = "Your Score: " + score
 
 
 func _on_restart_pressed() -> void:

@@ -4,11 +4,11 @@
 [ext_resource type="PackedScene" uid="uid://b3sfski2sjvr7" path="res://Scenes/ScoreLabel.tscn" id="2_hxdoa"]
 [ext_resource type="Texture2D" uid="uid://dbkgct53y2mi4" path="res://Assets/Backgrounds/Stage1.png" id="2_w7jkh"]
 [ext_resource type="PackedScene" uid="uid://cl1tend7gsp65" path="res://Scenes/Environment/destructible_asteroid.tscn" id="3_e6lov"]
+[ext_resource type="Script" path="res://scripts/LogManager.gd" id="3_ibbmm"]
 [ext_resource type="PackedScene" uid="uid://uld8474mocbo" path="res://Scenes/Environment/Supercharge_Buff.tscn" id="4_7ie2g"]
 [ext_resource type="PackedScene" uid="uid://8e7x38lhgn60" path="res://Scenes/Environment/deadline.tscn" id="5_x2l07"]
 [ext_resource type="Texture2D" uid="uid://b243wxpqsmc3q" path="res://Assets/Sprites/ships_asteroids.png" id="7_0kqip"]
 [ext_resource type="PackedScene" uid="uid://cmn6nqhf74w28" path="res://Scenes/Environment/Supercharge_Debuff.tscn" id="8_4s3hh"]
-[ext_resource type="PackedScene" uid="uid://bsrc0f5dbyqtl" path="res://Scenes/LogManager.tscn" id="9_3mlen"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xw1nj"]
 texture = ExtResource("7_0kqip")
@@ -603,11 +603,12 @@ script = ExtResource("1_rjitg")
 [node name="Label" parent="CanvasLayer" instance=ExtResource("2_hxdoa")]
 scale = Vector2(1.67871, 1.71042)
 
-[node name="RichTextLabel" parent="CanvasLayer" instance=ExtResource("9_3mlen")]
-text = "Hello"
-fit_content = true
-scroll_following = true
-visible_ratio = 0.0
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
+offset_left = 13.0
+offset_top = 810.0
+offset_right = 354.0
+offset_bottom = 938.0
+script = ExtResource("3_ibbmm")
 
 [node name="Background" type="Sprite2D" parent="."]
 texture = ExtResource("2_w7jkh")
