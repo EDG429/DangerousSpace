@@ -164,7 +164,7 @@ func spawn_supercharge_buff() -> void:
 	var spawn_y = - player_current_position.y + randf_range(- 80, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
 	
 	# Clamp the spawn position to ensure it remains within background bounds
-	spawn_x = clamp(spawn_x, -SIDE, SIDE)  # Clamp X to stay within left/right bounds
+	spawn_x = clamp(spawn_x, -SIDE + 30, SIDE - 30)  # Clamp X to stay within left/right bounds
 	spawn_y = clamp(spawn_y, player_current_position.y - 80, LNG / 2)  # Clamp Y to stay forward and within bounds
 	
 	var spawn_position = Vector2(spawn_x, spawn_y)
@@ -186,7 +186,7 @@ func spawn_supercharge_debuff() -> void:
 	var spawn_y = - player_current_position.y + randf_range(- 80, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
 	
 	# Clamp the spawn position to ensure it remains within background bounds
-	spawn_x = clamp(spawn_x, -SIDE, SIDE)  # Clamp X to stay within left/right bounds
+	spawn_x = clamp(spawn_x, -SIDE + 30, SIDE - 30)  # Clamp X to stay within left/right bounds
 	spawn_y = clamp(spawn_y, player_current_position.y - 80, LNG / 2)  # Clamp Y to stay forward and within bounds
 	
 	var spawn_position = Vector2(spawn_x, spawn_y)
