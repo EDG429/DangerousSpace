@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://dbkgct53y2mi4" path="res://Assets/Backgrounds/Stage1.png" id="2_w7jkh"]
 [ext_resource type="PackedScene" uid="uid://8e7x38lhgn60" path="res://Scenes/Environment/deadline.tscn" id="5_x2l07"]
 [ext_resource type="Texture2D" uid="uid://b243wxpqsmc3q" path="res://Assets/Sprites/ships_asteroids.png" id="7_0kqip"]
-[ext_resource type="Texture2D" uid="uid://bemjvmdiqkakx" path="res://Assets/Backgrounds/Space_Background1.png" id="7_bob8j"]
-[ext_resource type="PackedScene" uid="uid://j2m5dijc4bgm" path="res://Scenes/Environment/FinishLine.tscn" id="10_6u837"]
+[ext_resource type="Texture2D" uid="uid://dgcildwfp2t0s" path="res://Assets/Backgrounds/Space_Background3.png" id="8_0xopf"]
+[ext_resource type="PackedScene" path="res://Scenes/Environment/FinishLine.tscn" id="10_6u837"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xw1nj"]
 texture = ExtResource("7_0kqip")
@@ -623,20 +623,13 @@ tile_set = SubResource("TileSet_cd55e")
 z_index = 3
 position = Vector2(0, -7475)
 
-[node name="SpaceBackground1" type="Sprite2D" parent="."]
-position = Vector2(0, 5544)
-scale = Vector2(1, 1.28267)
-texture = ExtResource("7_bob8j")
-
-[node name="SpaceBackground1" type="Sprite2D" parent="SpaceBackground1"]
-position = Vector2(0, -3413.2)
-scale = Vector2(1, 1.28267)
-texture = ExtResource("7_bob8j")
-
-[node name="SpaceBackground1" type="Sprite2D" parent="SpaceBackground1/SpaceBackground1"]
-position = Vector2(0, -3365.2)
-scale = Vector2(1, 1.25067)
-texture = ExtResource("7_bob8j")
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -501.0
+offset_top = -9184.0
+offset_right = 499.0
+offset_bottom = 8830.0
+texture = ExtResource("8_0xopf")
+stretch_mode = 1
 
 [connection signal="timeout" from="SuperchargeSpawn_Timer" to="." method="_on_SuperchargeSpawn_Timer_timeout"]
 [connection signal="timeout" from="Deadline_Move_Timer" to="." method="_on_Deadline_Move_Timer_timeout"]
