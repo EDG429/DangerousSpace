@@ -10,16 +10,16 @@ const enemy_scene = preload("res://Scenes/Enemies/main_enemy.tscn")
 @onready var background: Sprite2D = $Background
 @onready var deadline: StaticBody2D = $Deadline
 
-@export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 20.0
+@export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 10.0
 @export var SUPERCHARGE_BUFF_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
 @export var ASTEROID_SPAWN_INTERVAL: float = 5.0
-@export var ASTEROID_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
+@export var ASTEROID_SPAWN_RADIUS: float = 700.0  # Maximum distance from the player to spawn the buff
 @export var SUPERCHARGE_BUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Buff.tscn")
 @export var DEBUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Debuff.tscn")
 @export var ASTEROID_SCENE = preload("res://Scenes/Environment/destructible_asteroid.tscn")
 @export var DEADLINE_MOVE_OFFSET: float = 75.0  # Pixels to move upwards
 @export var ENEMY_SCENE: PackedScene = preload("res://Scenes/Enemies/main_enemy.tscn")  # Path to the Enemy scene
-@export var SPAWN_RADIUS: float = 150.0  # Radius around the player where enemies will spawn
+@export var SPAWN_RADIUS: float = 500.0  # Radius around the player where enemies will spawn
 @export var MIN_ENEMIES: int = 3  # Minimum number of enemies to spawn per wave
 @export var MAX_ENEMIES: int = 5  # Maximum number of enemies to spawn per wave
 @export var SPAWN_INTERVAL_MIN: float = 7.0  # Minimum time interval between waves
@@ -216,7 +216,7 @@ func spawn_asteroid() -> void:
 
 		# Generate a random angle and distance within the radius
 		var angle = randf() * TAU # Random angle (0 to 2 * PI)
-		var distance = randf_range(100, ASTEROID_SPAWN_RADIUS) # Random distance within a safe range
+		var distance = randf_range(500, ASTEROID_SPAWN_RADIUS) # Random distance within a safe range
 
 		# Calculate spawn position using polar coordinates
 		spawn_position = player_current_position + Vector2(cos(angle), sin(angle)) * distance
@@ -250,6 +250,22 @@ func spawn_asteroid() -> void:
 
 		# Add the position to the list of spawned positions
 		spawned_positions.append(spawn_position)
+		
+		# Start cleanup coroutine for the asteroid
+		remove_asteroid_after_delay(spawned_asteroid, 20.0)
+
+func remove_asteroid_after_delay(asteroid: Node, delay: float) -> void:
+	await get_tree().create_timer(delay).timeout
+	
+	# Ensure the asteroid is still valid before freeing it
+	if is_instance_valid(asteroid):
+		# Remove position from the spawned positions list
+		for position in spawned_positions:
+			if asteroid.global_position.distance_to(position) < 1.0:  # Match positions
+				spawned_positions.erase(position)
+				break
+		asteroid.queue_free()
+
 	
 func _on_AsteroidSpawn_Timer_timeout() -> void:
 	var asteroid_count = last_asteroid_count
