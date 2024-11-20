@@ -203,7 +203,7 @@ func take_damage(damage_amount: int):
 	if health_bar: 
 		health_bar.visible = true  # Show the health bar when taking damage
 		health_bar.set_health(health)  # Update the health bar
-	#
+	
 	if health <= 0:
 		die()
 	else :

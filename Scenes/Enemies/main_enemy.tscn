@@ -1,0 +1,118 @@
+[gd_scene load_steps=22 format=3 uid="uid://bb6hhhun8033q"]
+
+[ext_resource type="Texture2D" uid="uid://bbwju5gfrg31q" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death1.png" id="1_hjxym"]
+[ext_resource type="Script" path="res://Scenes/Enemies/main_enemy.gd" id="1_jah4l"]
+[ext_resource type="Texture2D" uid="uid://cqdhy1a6ode87" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death2.png" id="2_362py"]
+[ext_resource type="Texture2D" uid="uid://b8y82hq51vm8i" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death3.png" id="3_s604b"]
+[ext_resource type="Texture2D" uid="uid://dpcf55hup6t6b" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death4.png" id="4_dc6pd"]
+[ext_resource type="Texture2D" uid="uid://bm6aqam6w2s10" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death5.png" id="5_460lw"]
+[ext_resource type="Texture2D" uid="uid://c24fohh13ebxj" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death6.png" id="6_yecj8"]
+[ext_resource type="Texture2D" uid="uid://7yqgga4g6see" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death7.png" id="7_k7x4i"]
+[ext_resource type="Texture2D" uid="uid://dlpy8o2qohpis" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death8.png" id="8_h6ddp"]
+[ext_resource type="Texture2D" uid="uid://dhdw2k4atqt4m" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death9.png" id="9_d5mkl"]
+[ext_resource type="Texture2D" uid="uid://ch2sqo33lixi4" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death10.png" id="10_13g1s"]
+[ext_resource type="Texture2D" uid="uid://dnren2ks4wtc0" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death11.png" id="11_7slle"]
+[ext_resource type="Texture2D" uid="uid://cbd0cxx4wgj7a" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death12.png" id="12_y5ucy"]
+[ext_resource type="Texture2D" uid="uid://cq37tsoeeem8p" path="res://Assets/Sprites/enemy_death_animation/EnemySprite_death13.png" id="13_cud41"]
+[ext_resource type="Texture2D" uid="uid://wr6h3rphhjo3" path="res://Assets/Sprites/EnemySprite_idle01.png" id="14_jnc6q"]
+[ext_resource type="Texture2D" uid="uid://d1roqwwci0us2" path="res://Assets/Sprites/EnemySprite_idle02.png" id="15_il1wb"]
+[ext_resource type="PackedScene" uid="uid://b2fde3mnc20fv" path="res://Scenes/Player/healthbar.tscn" id="17_04r6k"]
+[ext_resource type="AudioStream" uid="uid://bo5eabux6qg0w" path="res://Assets/SFX/sfx_BulletImpactOnEnemy.wav" id="18_5kddk"]
+[ext_resource type="AudioStream" uid="uid://1vn33nik6uln" path="res://Assets/SFX/sfx_EnemyExplosion.wav" id="19_buxof"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oo1q8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hjxym")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_362py")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_s604b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_dc6pd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_460lw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_yecj8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_k7x4i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_h6ddp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_d5mkl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_13g1s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_7slle")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_y5ucy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_cud41")
+}],
+"loop": false,
+"name": &"death",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_jnc6q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_il1wb")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jqaym"]
+size = Vector2(48, 40)
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_jah4l")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+rotation = 3.14159
+sprite_frames = SubResource("SpriteFrames_oo1q8")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_jqaym")
+
+[node name="Fire_Timer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="Healthbar" parent="." instance=ExtResource("17_04r6k")]
+offset_left = 40.0
+offset_top = 16.0
+offset_right = 80.0
+offset_bottom = 24.0
+rotation = -1.5708
+
+[node name="DamageFlicker_Timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="OnEnemyDamage_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("18_5kddk")
+
+[node name="OnEnemyExplosion_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("19_buxof")
+
+[connection signal="timeout" from="Fire_Timer" to="." method="_on_FireTimer_timeout"]
+[connection signal="timeout" from="DamageFlicker_Timer" to="." method="_on_DamageFeedbackTimer_timeout"]

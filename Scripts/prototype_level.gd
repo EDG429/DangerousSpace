@@ -2,6 +2,7 @@ class_name WorldLevel
 extends Node2D
 
 const player_scene = preload("res://Scenes/Player/player.tscn")
+const enemy_scene = preload("res://Scenes/Enemies/main_enemy.tscn")
 
 
 @onready var supercharge_spawn_timer: Timer = $SuperchargeSpawn_Timer
@@ -20,6 +21,7 @@ const player_scene = preload("res://Scenes/Player/player.tscn")
 
 var camera: Camera2D  # Store the Camera2D reference
 var player: Node2D  # Store the Player reference
+var enemy: Node2D
 var asteroid: Node2D # Store asteroid reference
 
 # Variables for camera clamping
@@ -36,11 +38,15 @@ func _ready() -> void:
 		SIDE = texture_size.x / 2  # Assign to class variable (no `var`)
 		LNG = texture_size.y      # Assign to class variable (no `var`)
 	
-	if player_scene:
+	if player_scene and enemy_scene:
 		# Instance and add the player to the scene
 		player = player_scene.instantiate()
 		add_child(player)
 		player.global_position = Vector2(0, 7400)  # Set the initial position (adjust as needed)
+		await get_tree().create_timer(3).timeout
+		enemy = enemy_scene.instantiate()
+		add_child(enemy)
+		enemy.global_position = Vector2(0, 7100)
 	
 		# Access the existing Camera2D on the player
 		camera = player.get_node("Camera2D") as Camera2D
