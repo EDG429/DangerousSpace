@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btmrefap8l8hp"
-path="res://.godot/imported/BossIdle02.png-1148e30c9db161542a29d68e8a292598.ctex"
+uid="uid://bqkw68uafuiaf"
+path="res://.godot/imported/BossDeathAnimation19.png-a986a103cbe627af87c8e2d93453e303.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/Boss/BossIdle02.png"
-dest_files=["res://.godot/imported/BossIdle02.png-1148e30c9db161542a29d68e8a292598.ctex"]
+source_file="res://Assets/Sprites/Boss/BossDeathAnimation19.png"
+dest_files=["res://.godot/imported/BossDeathAnimation19.png-a986a103cbe627af87c8e2d93453e303.ctex"]
 
 [params]
 
