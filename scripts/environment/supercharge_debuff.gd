@@ -29,3 +29,13 @@ func _on_body_entered(body: Node) -> void:
 		await pickup_sound.finished
 		queue_free()  # Remove the pickup object
 		
+	if body is Enemy and sprite_2d.visible:
+		body.apply_supercharge_debuff(duration)  # Apply the buff to the player		
+		pickup_sound.play()
+		ScoreManager.add_points(50)
+		sprite_2d.visible = false
+		cpu_particles_2d_2.emitting = false
+		cpu_particles_2d.emitting = false
+		collision_shape_2d.disabled
+		await pickup_sound.finished
+		queue_free()  # Remove the pickup object

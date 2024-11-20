@@ -346,7 +346,7 @@ func apply_supercharge_debuff(duration: float) -> void:
 	
 	is_downcharged = true
 	
-	# Double firerate and damage
+	# Halve firerate and damage
 	PRIMARY_SHOOTING_SPEED *= SUPERCHARGE_MULTIPLIER
 	SECONDARY_SHOOTING_SPEED *= SUPERCHARGE_MULTIPLIER	
 	
@@ -358,7 +358,7 @@ func apply_supercharge_debuff(duration: float) -> void:
 	debuff_timer.start(duration)
 
 func _on_Debuff_Timer_Timeout() -> void:
-	# Remove the buff after the timeout
+	# Remove the debuff after the timeout
 	is_downcharged = false
 	
 	# Restore original damage values
