@@ -240,6 +240,14 @@ func die() -> void:
 	animated_sprite.play("death")
 	on_player_death_sound.play()
 	
+	# Disable supercharged visuals
+	supercharge_particles_1.emitting = false
+	supercharge_particles_2.emitting = false
+	
+	# Disable debuff visuals
+	debuff_particles_1.emitting = false
+	debuff_particles_2.emitting = false
+	
 	# Wait for the animation to finish
 	await get_tree().create_timer(5).timeout
 	print("Player death animation.")
