@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 # Export vars
-@export var SPEED: float = 300.0  # Movement speed of the spaceship
+@export var SPEED: float = 175.0  # Movement speed of the spaceship
 @export var MAX_HP: int = 100    # Maximum hit points of the player
 @export var DODGE_SPEED: float = 500.0  # Speed boost when dodging
 @export var DODGE_DISTANCE: float = 25.0  # Distanced traveled while dodging

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cl1tend7gsp65"]
 
-[ext_resource type="Texture2D" uid="uid://b243wxpqsmc3q" path="res://Assets/Sprites/ships_asteroids.png" id="1_6civg"]
+[ext_resource type="Texture2D" uid="uid://ccm437x3loxqd" path="res://Assets/Sprites/asteroid_sprite.png" id="1_8vq5t"]
 [ext_resource type="Script" path="res://scripts/environment/Asteroid.gd" id="2_ni7y6"]
 [ext_resource type="AudioStream" uid="uid://dsbyo34s8oeud" path="res://Assets/SFX/sfx_damage_AsteroidHit.wav" id="3_aue8w"]
 
@@ -8,8 +8,8 @@
 radius = 25.1794
 
 [node name="Asteroid1" type="Sprite2D"]
-texture = ExtResource("1_6civg")
-region_enabled = true
+scale = Vector2(2.53603, 2.53603)
+texture = ExtResource("1_8vq5t")
 region_rect = Rect2(64, 192, 48, 48)
 script = ExtResource("2_ni7y6")
 damage = 20

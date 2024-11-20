@@ -12,11 +12,11 @@ const player_scene = preload("res://Scenes/Player/player.tscn")
 @export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 20.0
 @export var SUPERCHARGE_BUFF_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
 @export var ASTEROID_SPAWN_INTERVAL: float = 5.0
-@export var ASTEROID_SPAWN_RADIUS: float = 150.0  # Maximum distance from the player to spawn the buff
+@export var ASTEROID_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
 @export var SUPERCHARGE_BUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Buff.tscn")
 @export var DEBUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Debuff.tscn")
 @export var ASTEROID_SCENE = preload("res://Scenes/Environment/destructible_asteroid.tscn")
-@export var DEADLINE_MOVE_OFFSET: float = 50.0  # Pixels to move upwards
+@export var DEADLINE_MOVE_OFFSET: float = 75.0  # Pixels to move upwards
 
 var camera: Camera2D  # Store the Camera2D reference
 var player: Node2D  # Store the Player reference
@@ -139,11 +139,11 @@ func spawn_asteroid() -> void:
 	
 	# Generate in a random position around the player
 	var spawn_x = player_current_position.x + randf_range(-ASTEROID_SPAWN_RADIUS, ASTEROID_SPAWN_RADIUS)
-	var spawn_y = - player_current_position.y + randf_range(- 150, ASTEROID_SPAWN_RADIUS)  # Always forward (Y increases)
+	var spawn_y = - player_current_position.y + randf_range(- 250, ASTEROID_SPAWN_RADIUS)  # Always forward (Y increases)
 	
 	# Clamp the spawn position to ensure it remains within background bounds
 	spawn_x = clamp(spawn_x, -SIDE, SIDE)  # Clamp X to stay within left/right bounds
-	spawn_y = clamp(spawn_y, player_current_position.y - 150, LNG / 2)  # Clamp Y to stay forward and within bounds
+	spawn_y = clamp(spawn_y, player_current_position.y - 250, LNG / 2)  # Clamp Y to stay forward and within bounds
 	
 	var spawn_position = Vector2(spawn_x, spawn_y)
 	
@@ -153,6 +153,8 @@ func spawn_asteroid() -> void:
 	spawned_asteroid.global_position = spawn_position
 	
 func _on_AsteroidSpawn_Timer_timeout() -> void:
+	spawn_asteroid()
+	spawn_asteroid()
 	spawn_asteroid()
 	
 # ---------------------- Asteroid Spawning Logic End  -------------------------------------- #
