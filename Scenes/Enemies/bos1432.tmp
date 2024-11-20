@@ -224,7 +224,7 @@ _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.578947, 200), 0.0, 0.0, 0, 0, 
 point_count = 3
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pbdwr"]
-size = Vector2(1288, 216)
+size = Vector2(1288, 317.333)
 
 [node name="Boss" type="CharacterBody2D" groups=["enemies"]]
 scale = Vector2(3, 3)
@@ -318,7 +318,7 @@ one_shot = true
 [node name="AwakenZone" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AwakenZone"]
-position = Vector2(44, 12)
+position = Vector2(44, 62.6667)
 shape = SubResource("RectangleShape2D_pbdwr")
 
 [connection signal="timeout" from="Fire_Timer" to="." method="_on_Boss_FireTimer_timeout"]

@@ -53,6 +53,7 @@ func initialize_bossfight() -> void:
 	damage_flicker_timer.start()
 
 func _ready() -> void:
+	GameState.connect("player_died", Callable(self, "_on_player_died"))
 	sleep()
 
 func _on_awaken_zone_body_entered(body: Node2D) -> void:
@@ -63,7 +64,7 @@ func _on_awaken_zone_body_entered(body: Node2D) -> void:
 		awaken()
 
 func _process(delta: float) -> void:
-	if is_dead or is_asleep or health <= 0:  # Add 'is_asleep' to the condition
+	if is_dead or is_asleep or health <= 0 or player_dead:  # Add 'is_asleep' to the condition
 		return
 
 	if not is_instance_valid(player):
@@ -98,3 +99,7 @@ func fire() -> void:
 func _on_Boss_FireTimer_timeout() -> void:
 	if not is_asleep and not is_dead and is_instance_valid(player):
 		fire()
+
+func _on_player_died() -> void:
+	player_dead = true
+	fire_timer.stop()

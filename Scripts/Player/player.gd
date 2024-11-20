@@ -254,6 +254,7 @@ func die() -> void:
 	is_dead = true
 	# Emit signal when death process is complete
 	emit_signal("player_death_complete")
+	GameState.mark_player_dead()
 	print("Player death signal.")
 # -------------------------------------- Dodge Logic Start ---------------------------------------------- #
 

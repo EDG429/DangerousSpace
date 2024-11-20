@@ -1,6 +1,9 @@
 extends Node
 
 signal game_over
+signal player_death
+
+var player_is_dead: bool = false  # Track if the player is dead
 
 # References to key nodes (set during runtime)
 var player: Node = null
@@ -66,3 +69,7 @@ func clear_references() -> void:
 	deadline = null
 	finish_line = null
 	print("GameState references cleared.")
+
+func mark_player_dead() -> void:
+	player_is_dead = true
+	emit_signal("player_died")

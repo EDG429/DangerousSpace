@@ -37,9 +37,12 @@ var is_shooting: bool = false
 var is_taking_damage: bool = false
 var is_supercharged: bool = false
 var is_downcharged: bool = false
-
+var player_dead: bool = false
 
 func _ready() -> void:
+	
+	GameState.connect("player_died", Callable(self, "_on_player_died"))
+	
 	health = MAX_HP
 	if health_bar:
 		health_bar.init_health(health)
@@ -55,10 +58,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	
-	if player_state == null:
+	if player_state == null or player_dead:
 		return
 	
 	if is_dead or health <= 0:
+		collision_shape_2d.disabled = true
 		return
 	
 	# Ensure the player instance is valid
@@ -225,4 +229,10 @@ func heal(heal_amount: int) -> void:
 	health = clamp(health + heal_amount, 0, MAX_HP)
 	if health_bar:
 		health_bar.set_health(health)
-## ------------------------------------- Buff or Debuff Logic End --------------------------------------- #
+# ------------------------------------- Buff or Debuff Logic End --------------------------------------- #
+
+# ------------------------------------- Additional Logic ------------------------------------------ #
+
+func _on_player_died() -> void:
+	player_dead = true
+	fire_timer.stop()
