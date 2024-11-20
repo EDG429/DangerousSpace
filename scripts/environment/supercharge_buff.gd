@@ -1,6 +1,7 @@
 extends Area2D
 
 @export var duration: float = 20.0  # Buff duration in seconds
+@export var heal_amount: int = 25
 
 @onready var pickup_sound: AudioStreamPlayer2D = $PickupSound
 @onready var sprite_2d: Sprite2D = $Sprite2D
@@ -20,7 +21,8 @@ func _process(delta: float) -> void:
 func _on_body_entered(body: Node) -> void:
 	
 	if body is Player and sprite_2d.visible:
-		body.apply_supercharge_buff(duration)  # Apply the buff to the player		
+		body.apply_supercharge_buff(duration)  # Apply the buff to the player
+		body.heal(heal_amount)
 		pickup_sound.play() 
 		ScoreManager.add_points(50)
 		sprite_2d.visible = false
@@ -32,6 +34,7 @@ func _on_body_entered(body: Node) -> void:
 	
 	if body is Enemy and sprite_2d.visible:
 		body.apply_supercharge_buff(duration)
+		body.heal(heal_amount)
 		pickup_sound.play()
 		ScoreManager.substract_points(50)
 		sprite_2d.visible = false

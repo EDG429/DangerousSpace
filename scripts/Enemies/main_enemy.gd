@@ -2,7 +2,7 @@ class_name Enemy
 extends CharacterBody2D
 
 # Export Variables
-@export var SPEED: float = 100.0  # Movement speed
+@export var SPEED: float = 175.0  # Movement speed
 @export var MAX_HP: int = 50     # Enemy health
 @export var BOUNTY: int = 50     # Points awarded for destroying this enemy
 @export var BULLET_SCENE: PackedScene = preload("res://Scenes/Enemies/enemy_bullet.tscn")  # Bullet scene for enemy fire
@@ -22,6 +22,7 @@ extends CharacterBody2D
 @onready var on_enemy_damage_sound: AudioStreamPlayer2D = $OnEnemyDamage_Sound
 @onready var on_enemy_explosion_sound: AudioStreamPlayer2D = $OnEnemyExplosion_Sound
 @onready var debuff_timer: Timer = $Debuff_Timer
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 
 
@@ -107,6 +108,9 @@ func _on_DamageFeedbackTimer_timeout() -> void:
 
 func die() -> void:
 	is_dead = true
+	
+	# Disable collisionshape
+	collision_shape_2d.disabled
 	
 	# Disable supercharged visuals
 	supercharge_particles_1.emitting = false
@@ -211,4 +215,9 @@ func _on_Debuff_Timer_Timeout() -> void:
 	# Disable supercharged visuals
 	debuff_particles_1.emitting = false
 	debuff_particles_2.emitting = false
+
+func heal(heal_amount: int) -> void:
+	health = clamp(health + heal_amount, 0, MAX_HP)
+	if health_bar:
+		health_bar.set_health(health)
 ## ------------------------------------- Buff or Debuff Logic End --------------------------------------- #

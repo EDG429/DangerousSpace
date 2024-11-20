@@ -3,7 +3,8 @@ extends Node2D
 
 const player_scene = preload("res://Scenes/Player/player.tscn")
 const enemy_scene = preload("res://Scenes/Enemies/main_enemy.tscn")
-
+const MIN_SCALE = 0.5  # Minimum scale of the asteroid
+const MAX_SCALE = 1.5  # Maximum scale of the asteroid
 
 @onready var supercharge_spawn_timer: Timer = $SuperchargeSpawn_Timer
 @onready var asteroid_spawn_timer: Timer = $AsteroidSpawn_Timer
@@ -20,8 +21,8 @@ const enemy_scene = preload("res://Scenes/Enemies/main_enemy.tscn")
 @export var DEADLINE_MOVE_OFFSET: float = 75.0  # Pixels to move upwards
 @export var ENEMY_SCENE: PackedScene = preload("res://Scenes/Enemies/main_enemy.tscn")  # Path to the Enemy scene
 @export var SPAWN_RADIUS: float = 500.0  # Radius around the player where enemies will spawn
-@export var MIN_ENEMIES: int = 3  # Minimum number of enemies to spawn per wave
-@export var MAX_ENEMIES: int = 5  # Maximum number of enemies to spawn per wave
+@export var MIN_ENEMIES: int = 1  # Minimum number of enemies to spawn per wave
+@export var MAX_ENEMIES: int = 2   # Maximum number of enemies to spawn per wave
 @export var SPAWN_INTERVAL_MIN: float = 7.0  # Minimum time interval between waves
 @export var SPAWN_INTERVAL_MAX: float = 10.0  # Maximum time interval between waves
 @export var MIN_DISTANCE_BETWEEN_ENEMIES: float = 60.0  # Minimum distance between spawned enemies
@@ -240,6 +241,9 @@ func spawn_asteroid() -> void:
 		var spawned_asteroid = ASTEROID_SCENE.instantiate()
 		add_child(spawned_asteroid)
 		spawned_asteroid.global_position = spawn_position
+		var random_scale = randf_range(MIN_SCALE, MAX_SCALE)
+		spawned_asteroid.scale = Vector2(random_scale, random_scale)
+		spawned_asteroid.rotation = randf() * TAU
 
 		# Calculate direction towards the player
 		var direction = (player.global_position - spawn_position).normalized()
@@ -288,15 +292,8 @@ func _on_Deadline_Move_Timer_timeout() -> void:
 
 # ---------------------- Game Over Logic Start --------------------------------------- #
 func _on_game_over(reason: String) -> void:
-	cleanup_level()
-	print("Game Over triggered! Reason: ", reason)
-	
+
 	active_enemies.clear()
 	
 	
 # ---------------------- Level Cleaning Logic ------------------------------------------- #
-func cleanup_level() -> void:
-	# Remove all enemies
-	for enemy in get_tree().get_nodes_in_group("enemies"):
-		enemy.queue_free()
-	

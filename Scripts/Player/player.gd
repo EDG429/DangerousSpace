@@ -7,9 +7,9 @@ extends CharacterBody2D
 @export var DODGE_SPEED: float = 500.0  # Speed boost when dodging
 @export var DODGE_DISTANCE: float = 25.0  # Distanced traveled while dodging
 @export var DODGE_TIME: float = 0.25  # Duration of dodge in seconds
-@export var DODGE_COOLDOWN: float = 2.0  # Cooldown duration in seconds
+@export var DODGE_COOLDOWN: float = 1.5  # Cooldown duration in seconds
 @export var PRIMARY_SHOOTING_SPEED: float = 0.075 # Shooting cooldown in seconds
-@export var SECONDARY_SHOOTING_SPEED: float = 0.2 # Shooting cooldown in seconds
+@export var SECONDARY_SHOOTING_SPEED: float = 0.175 # Shooting cooldown in seconds
 @export var BULLET_PLAYER_PRIMARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_primary_fire.tscn") # Getting the projectile scene for primary fire
 @export var BULLET_PLAYER_SECONDARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_secondary_fire.tscn") # Getting the projectile scene for secondary fire
 @export var SUPERCHARGE_MULTIPLIER: float = 2.0 # Multiplier for firing speed and damage
@@ -369,4 +369,10 @@ func _on_Debuff_Timer_Timeout() -> void:
 	# Disable supercharged visuals
 	debuff_particles_1.emitting = false
 	debuff_particles_2.emitting = false
+
+func heal(heal_amount: int) -> void:
+	health = clamp(health + heal_amount, 0, MAX_HP)
+	if health_bar:
+		health_bar.set_health(health)
+
 # ------------------------------------- Buff or Debuff Logic End --------------------------------------- #
