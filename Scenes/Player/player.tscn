@@ -113,7 +113,6 @@ point_count = 3
 [node name="Player" type="CharacterBody2D"]
 rotation = 0.00418758
 script = ExtResource("1_ysrji")
-MAX_HP = 100000000
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hppht")
