@@ -2,14 +2,12 @@ class_name Enemy
 extends CharacterBody2D
 
 # Export Variables
-@export var SPEED: float = 125.0  # Movement speed
+@export var SPEED: float = 100.0  # Movement speed
 @export var MAX_HP: int = 50     # Enemy health
 @export var BOUNTY: int = 50     # Points awarded for destroying this enemy
-@export var BULLET_SCENE: PackedScene = preload("res://Scenes/Player/bullet_player_primary_fire.tscn")  # Bullet scene for enemy fire
-@export var FIRE_RATE: float = 0.2  # Fire rate in seconds
+@export var BULLET_SCENE: PackedScene = preload("res://Scenes/Enemies/enemy_bullet.tscn")  # Bullet scene for enemy fire
+@export var FIRE_RATE: float = 0.5  # Fire rate in seconds
 @export var SUPERCHARGE_MULTIPLIER: float = 2.0 # Multiplier for firing speed and damage
-
-
 
 # OnReady Variables
 @onready var supercharge_particles_1: CPUParticles2D = $Supercharge_Particles1
@@ -30,6 +28,7 @@ extends CharacterBody2D
 # General Variables
 var player: Node2D = null  # Reference to the player
 var health: int
+var player_state = GameState.player
 
 # Boolean flags:
 var is_dead: bool = false
@@ -45,6 +44,7 @@ func _ready() -> void:
 		health_bar.init_health(health)
 	# Find the player in the scene tree
 	player = get_tree().get_root().get_node("prototype_level/Player")  # Adjust path to match your scene setup
+	
 	if not player:
 		print("Player not found. Enemy won't follow.")
 	
@@ -54,10 +54,14 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	
+	if player_state == null:
+		return
+	
 	if is_dead or health <= 0:
 		return
 	
-	if player:
+	# Ensure the player instance is valid
+	if is_instance_valid(player):
 		# Follow the player
 		var direction = (player.global_position - global_position).normalized()
 		velocity = direction * SPEED
@@ -124,18 +128,23 @@ func die() -> void:
 
 # -------------------------- Firing Logic Start --------------------------- #
 func fire() -> void:
-	if is_dead:
+	
+	if is_dead or player_state == null:
 		return
 		
 	# Create and fire a bullet at the player
 	var bullet = BULLET_SCENE.instantiate()
 	get_parent().add_child(bullet)  # Add the bullet to the parent node
+	var bullet_sprite = bullet.get_node("Sprite2D")
 	
 	# Play firing SFX here
 	#######################
 	
 	bullet.global_position = global_position + Vector2(0, 25) if animated_sprite.flip_v == false else global_position + Vector2(0, - 25)
 	bullet.direction = (player.global_position - global_position).normalized()
+	
+	# Flip the bullet sprite vertically based on the firing direction
+	bullet_sprite.flip_v = true if animated_sprite.flip_v == false else false
 	
 func _on_FireTimer_timeout() -> void:
 	if player:

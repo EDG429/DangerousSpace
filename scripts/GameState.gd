@@ -33,6 +33,7 @@ func check_game_over() -> void:
 		player.connect("player_death_complete", Callable(self, "_on_player_death_complete"))
 		print("Connected to player_death_complete signal.")
 		_on_player_death_complete()
+		player = null
 		return
 		
 	# Condition 2: Deadline's Y position is out of bounds

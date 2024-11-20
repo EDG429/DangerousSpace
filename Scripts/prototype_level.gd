@@ -18,11 +18,19 @@ const enemy_scene = preload("res://Scenes/Enemies/main_enemy.tscn")
 @export var DEBUFF_SCENE = preload("res://Scenes/Environment/Supercharge_Debuff.tscn")
 @export var ASTEROID_SCENE = preload("res://Scenes/Environment/destructible_asteroid.tscn")
 @export var DEADLINE_MOVE_OFFSET: float = 75.0  # Pixels to move upwards
+@export var ENEMY_SCENE: PackedScene = preload("res://Scenes/Enemies/main_enemy.tscn")  # Path to the Enemy scene
+@export var SPAWN_RADIUS: float = 150.0  # Radius around the player where enemies will spawn
+@export var MIN_ENEMIES: int = 3  # Minimum number of enemies to spawn per wave
+@export var MAX_ENEMIES: int = 5  # Maximum number of enemies to spawn per wave
+@export var SPAWN_INTERVAL_MIN: float = 7.0  # Minimum time interval between waves
+@export var SPAWN_INTERVAL_MAX: float = 10.0  # Maximum time interval between waves
+@export var MIN_DISTANCE_BETWEEN_ENEMIES: float = 60.0  # Minimum distance between spawned enemies
 
 var camera: Camera2D  # Store the Camera2D reference
 var player: Node2D  # Store the Player reference
 var enemy: Node2D
 var asteroid: Node2D # Store asteroid reference
+var active_enemies: Array = []  # Keep track of spawned enemies
 
 # Variables for camera clamping
 var SIDE: int = 0.0  # Width of the texture divided by two
@@ -38,15 +46,11 @@ func _ready() -> void:
 		SIDE = texture_size.x / 2  # Assign to class variable (no `var`)
 		LNG = texture_size.y      # Assign to class variable (no `var`)
 	
-	if player_scene and enemy_scene:
+	if player_scene:
 		# Instance and add the player to the scene
 		player = player_scene.instantiate()
 		add_child(player)
 		player.global_position = Vector2(0, 7400)  # Set the initial position (adjust as needed)
-		await get_tree().create_timer(3).timeout
-		enemy = enemy_scene.instantiate()
-		add_child(enemy)
-		enemy.global_position = Vector2(0, 7100)
 	
 		# Access the existing Camera2D on the player
 		camera = player.get_node("Camera2D") as Camera2D
@@ -58,6 +62,9 @@ func _ready() -> void:
 			camera.limit_bottom = LNG/2
 		else:
 			print("Error! No camera detected")
+	
+	spawn_wave()  # Immediately spawn the first wave
+	start_spawn_timer() # Immediately start the spawn timer
 	
 	# Start the supercharge buff spawn timer
 	supercharge_spawn_timer.wait_time = SUPERCHARGE_BUFF_SPAWN_INTERVAL
@@ -73,6 +80,60 @@ func _ready() -> void:
 	# Connect the game_over signal to handle game over logic
 	GameState.connect("game_over", Callable(self, "_on_game_over"))
 	
+# ----------------------------- Enemy Spawn Logic Start ---------------------------------- #
+
+func start_spawn_timer() -> void:
+	
+	while Player:
+		var random_interval = randf_range(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX)
+		await get_tree().create_timer(random_interval).timeout
+		spawn_wave()
+
+func spawn_wave() -> void:
+	if not player or player.global_position.y < -7400:
+		print("Player not found. Cannot spawn enemies.")
+		return
+	
+	# Randomize the number of enemies for this wave
+	var num_enemies = randi_range(MIN_ENEMIES, MAX_ENEMIES)
+	var spawn_positions: Array = []
+	
+	for i in range(num_enemies):
+		var position = get_valid_spawn_position(spawn_positions)
+		if position != null:
+			spawn_enemy(position)
+			spawn_positions.append(position)
+
+func spawn_enemy(position: Vector2) -> void:
+	var enemy_instance = ENEMY_SCENE.instantiate()
+	get_parent().add_child(enemy_instance)  # Add enemy to the parent node
+	enemy_instance.global_position = position
+	active_enemies.append(enemy_instance)  # Keep track of the spawned enemy
+	enemy_instance.add_to_group("enemies")
+
+func get_valid_spawn_position(existing_positions: Array) -> Vector2:
+	var attempts:int = 10  # Limit the number of attempts to avoid infinite loops
+	while attempts > 0:
+		var random_angle = randf() * TAU  # Random angle in radians
+		var offset = Vector2(cos(random_angle), sin(random_angle)) * SPAWN_RADIUS
+		var spawn_position = player.global_position + offset
+		
+		 # Check if the position is valid (not overlapping with existing enemies)
+		var is_valid = true
+		for existing_pos in existing_positions:
+			if spawn_position.distance_to(existing_pos) < MIN_DISTANCE_BETWEEN_ENEMIES:
+				is_valid = false
+				break
+		
+		if is_valid:
+			return spawn_position
+		
+		attempts -= 1
+	
+	return Vector2.ZERO
+	
+# ----------------------------- Enemy Spawn Logic Start ---------------------------------- #
+
 func _process(_delta: float) -> void:
 	
 	# Check for game over conditions
@@ -173,6 +234,15 @@ func _on_Deadline_Move_Timer_timeout() -> void:
 
 # ---------------------- Game Over Logic Start --------------------------------------- #
 func _on_game_over(reason: String) -> void:
+	cleanup_level()
 	print("Game Over triggered! Reason: ", reason)
 	
+	active_enemies.clear()
+	
+	
+# ---------------------- Level Cleaning Logic ------------------------------------------- #
+func cleanup_level() -> void:
+	# Remove all enemies
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		enemy.queue_free()
 	
