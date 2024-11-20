@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export var MAX_HP: int = 50     # Enemy health
 @export var BOUNTY: int = 50     # Points awarded for destroying this enemy
 @export var BULLET_SCENE: PackedScene = preload("res://Scenes/Player/bullet_player_primary_fire.tscn")  # Bullet scene for enemy fire
-@export var FIRE_RATE: float = 1.5  # Fire rate in seconds
+@export var FIRE_RATE: float = 0.2  # Fire rate in seconds
 @export var SUPERCHARGE_MULTIPLIER: float = 2.0 # Multiplier for firing speed and damage
 
 
@@ -37,6 +37,7 @@ var is_shooting: bool = false
 var is_taking_damage: bool = false
 var is_supercharged: bool = false
 var is_downcharged: bool = false
+
 
 func _ready() -> void:
 	health = MAX_HP
@@ -122,19 +123,24 @@ func die() -> void:
 # ------------------------ Damage Processing Logic End ---------------------------------- #
 
 # -------------------------- Firing Logic Start --------------------------- #
-
-func _on_FireTimer_timeout() -> void:
-	if player:
-		pass
-		#fire()
-
 func fire() -> void:
+	if is_dead:
+		return
+		
 	# Create and fire a bullet at the player
 	var bullet = BULLET_SCENE.instantiate()
 	get_parent().add_child(bullet)  # Add the bullet to the parent node
-	bullet.global_position = global_position
+	
+	# Play firing SFX here
+	#######################
+	
+	bullet.global_position = global_position + Vector2(0, 25) if animated_sprite.flip_v == false else global_position + Vector2(0, - 25)
 	bullet.direction = (player.global_position - global_position).normalized()
 	
+func _on_FireTimer_timeout() -> void:
+	if player:
+		pass
+		fire()
 # -------------------------- Firing Logic End --------------------------- #
 
 # ------------------------------------- Buff or Debuff Logic Start --------------------------------------- #
@@ -147,6 +153,7 @@ func apply_supercharge_buff(duration: float) -> void:
 	
 	# Double firerate and damage
 	FIRE_RATE /= SUPERCHARGE_MULTIPLIER
+	fire_timer.wait_time = FIRE_RATE  # Update the timer with the new fire rate
 	
 	# Enable supercharged visuals
 	supercharge_particles_1.emitting = true
@@ -161,7 +168,7 @@ func _on_Supercharge_Timer_Timeout() -> void:
 	
 	# Restore original fire rate values
 	FIRE_RATE *= SUPERCHARGE_MULTIPLIER
-
+	fire_timer.wait_time = FIRE_RATE  # Update the timer
 	
 	# Disable supercharged visuals
 	supercharge_particles_1.emitting = false
@@ -175,7 +182,7 @@ func apply_supercharge_debuff(duration: float) -> void:
 	#
 	# Halve firerate and damage
 	FIRE_RATE *= SUPERCHARGE_MULTIPLIER
-	
+	fire_timer.wait_time = FIRE_RATE  # Update the timer
 	#
 	# Enable supercharged visuals
 	debuff_particles_1.emitting = true
@@ -189,7 +196,8 @@ func _on_Debuff_Timer_Timeout() -> void:
 	is_downcharged = false
 	#
 	# Restore original firerate values
-	FIRE_RATE *= SUPERCHARGE_MULTIPLIER
+	FIRE_RATE /= SUPERCHARGE_MULTIPLIER
+	fire_timer.wait_time = FIRE_RATE
 	#
 	# Disable supercharged visuals
 	debuff_particles_1.emitting = false
