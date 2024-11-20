@@ -30,7 +30,12 @@ var camera: Camera2D  # Store the Camera2D reference
 var player: Node2D  # Store the Player reference
 var enemy: Node2D
 var asteroid: Node2D # Store asteroid reference
+var last_asteroid_count = -1
+var spawned_positions = [] # List to keep track of spawned asteroid positions
 var active_enemies: Array = []  # Keep track of spawned enemies
+
+const MIN_DISTANCE_BETWEEN_ASTEROIDS = 50.0 # Minimum distance to avoid overlap
+const ASTEROID_SPEED = 200.0 # Speed of the asteroid moving towards the player
 
 # Variables for camera clamping
 var SIDE: int = 0.0  # Width of the texture divided by two
@@ -199,30 +204,63 @@ func _on_SuperchargeSpawn_Timer_timeout() -> void:
 # ---------------------- Asteroid Spawning Logic Start  -------------------------------------- #
 func spawn_asteroid() -> void:
 	if not player:
-		return # Need player to spawn
-	
-	# Fetch the player's current position
-	var player_current_position = player.global_position
-	
-	# Generate in a random position around the player
-	var spawn_x = player_current_position.x + randf_range(-ASTEROID_SPAWN_RADIUS, ASTEROID_SPAWN_RADIUS)
-	var spawn_y = - player_current_position.y + randf_range(- 250, ASTEROID_SPAWN_RADIUS)  # Always forward (Y increases)
-	
-	# Clamp the spawn position to ensure it remains within background bounds
-	spawn_x = clamp(spawn_x, -SIDE, SIDE)  # Clamp X to stay within left/right bounds
-	spawn_y = clamp(spawn_y, player_current_position.y - 250, LNG / 2)  # Clamp Y to stay forward and within bounds
-	
-	var spawn_position = Vector2(spawn_x, spawn_y)
-	
-	# Instance the Supercharge Buff and add it to the scene
-	var spawned_asteroid = ASTEROID_SCENE.instantiate()
-	add_child(spawned_asteroid)
-	spawned_asteroid.global_position = spawn_position
+		return # Player is needed to spawn asteroids
+
+	var spawn_position: Vector2
+	var attempts = 0
+	var is_valid_position = false
+
+	while not is_valid_position and attempts < 10:
+		# Fetch the player's current position
+		var player_current_position = player.global_position
+
+		# Generate a random angle and distance within the radius
+		var angle = randf() * TAU # Random angle (0 to 2 * PI)
+		var distance = randf_range(100, ASTEROID_SPAWN_RADIUS) # Random distance within a safe range
+
+		# Calculate spawn position using polar coordinates
+		spawn_position = player_current_position + Vector2(cos(angle), sin(angle)) * distance
+
+		# Clamp spawn position to ensure it remains within the background bounds
+		spawn_position.x = clamp(spawn_position.x, -SIDE, SIDE)
+		spawn_position.y = clamp(spawn_position.y, player_current_position.y - 250, LNG / 2)
+
+		# Check against existing positions to avoid overlap
+		is_valid_position = true
+		for existing_position in spawned_positions:
+			if spawn_position.distance_to(existing_position) < MIN_DISTANCE_BETWEEN_ASTEROIDS:
+				is_valid_position = false
+				break
+
+		attempts += 1
+
+	# If a valid position is found within allowed attempts
+	if is_valid_position:
+		# Instance the asteroid and set its position
+		var spawned_asteroid = ASTEROID_SCENE.instantiate()
+		add_child(spawned_asteroid)
+		spawned_asteroid.global_position = spawn_position
+
+		# Calculate direction towards the player
+		var direction = (player.global_position - spawn_position).normalized()
+
+		# Assign velocity to the asteroid (requires a `velocity` property in the asteroid script)
+		if spawned_asteroid.has_method("set_velocity"):
+			spawned_asteroid.call("set_velocity", direction * ASTEROID_SPEED)
+
+		# Add the position to the list of spawned positions
+		spawned_positions.append(spawn_position)
 	
 func _on_AsteroidSpawn_Timer_timeout() -> void:
-	spawn_asteroid()
-	spawn_asteroid()
-	spawn_asteroid()
+	var asteroid_count = last_asteroid_count
+
+	while asteroid_count == last_asteroid_count:
+		asteroid_count = randi_range(2, 6)
+
+	last_asteroid_count = asteroid_count
+
+	for i in range(asteroid_count): # Spawn three asteroids
+		spawn_asteroid()
 	
 # ---------------------- Asteroid Spawning Logic End  -------------------------------------- #
 # ---------------------- Deadline Moving Logic Start ----------------------------------- #

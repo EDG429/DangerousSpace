@@ -10,7 +10,7 @@ extends Sprite2D
 @onready var asteroid_hit_sound: AudioStreamPlayer2D = $AsteroidHit_Sound
 
 var is_taking_damage: bool = false
-
+var velocity = Vector2.ZERO
 var health: int
 var is_dead: bool
 
@@ -54,3 +54,9 @@ func explode() -> void:
 	is_dead = true
 	ScoreManager.add_points(50)
 	queue_free()
+
+func _process(delta: float) -> void:
+	position += velocity * delta
+
+func set_velocity(new_velocity: Vector2) -> void:
+	velocity = new_velocity
