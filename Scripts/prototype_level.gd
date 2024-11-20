@@ -21,8 +21,8 @@ const MAX_SCALE = 1.5  # Maximum scale of the asteroid
 @export var DEADLINE_MOVE_OFFSET: float = 75.0  # Pixels to move upwards
 @export var ENEMY_SCENE: PackedScene = preload("res://Scenes/Enemies/main_enemy.tscn")  # Path to the Enemy scene
 @export var SPAWN_RADIUS: float = 500.0  # Radius around the player where enemies will spawn
-@export var MIN_ENEMIES: int = 1  # Minimum number of enemies to spawn per wave
-@export var MAX_ENEMIES: int = 2   # Maximum number of enemies to spawn per wave
+@export var MIN_ENEMIES: int = 2  # Minimum number of enemies to spawn per wave
+@export var MAX_ENEMIES: int = 3   # Maximum number of enemies to spawn per wave
 @export var SPAWN_INTERVAL_MIN: float = 7.0  # Minimum time interval between waves
 @export var SPAWN_INTERVAL_MAX: float = 10.0  # Maximum time interval between waves
 @export var MIN_DISTANCE_BETWEEN_ENEMIES: float = 60.0  # Minimum distance between spawned enemies
@@ -31,6 +31,7 @@ var camera: Camera2D  # Store the Camera2D reference
 var player: Node2D  # Store the Player reference
 var enemy: Node2D
 var asteroid: Node2D # Store asteroid reference
+var buff_spawn_position: Vector2
 var last_asteroid_count = -1
 var spawned_positions = [] # List to keep track of spawned asteroid positions
 var active_enemies: Array = []  # Keep track of spawned enemies
@@ -152,9 +153,9 @@ func _process(_delta: float) -> void:
 	
 
 # ---------------------- Buff and Debuff Spawning Logic Start -------------------------------------- #
-func spawn_supercharge_buff() -> void:
+func spawn_supercharge_buff() -> Vector2:
 	if not player:
-		return # Need player to spawn
+		Vector2.ZERO # Need player to spawn
 	
 	# Fetch the player's current position
 	var player_current_position = player.global_position
@@ -167,34 +168,48 @@ func spawn_supercharge_buff() -> void:
 	spawn_x = clamp(spawn_x, -SIDE + 30, SIDE - 30)  # Clamp X to stay within left/right bounds
 	spawn_y = clamp(spawn_y, player_current_position.y - 80, LNG / 2)  # Clamp Y to stay forward and within bounds
 	
-	var spawn_position = Vector2(spawn_x, spawn_y)
+	var buff_spawn_position = Vector2(spawn_x, spawn_y)
 	
 	# Instance the Supercharge Buff and add it to the scene
 	var supercharge_buff = SUPERCHARGE_BUFF_SCENE.instantiate()
 	add_child(supercharge_buff)
-	supercharge_buff.global_position = spawn_position
+	supercharge_buff.global_position = buff_spawn_position
+	
+	return buff_spawn_position
 
 func spawn_supercharge_debuff() -> void:
+	
 	if not player:
 		return # Need player to spawn
 	
 	# Fetch the player's current position
 	var player_current_position = player.global_position
+	var spawn_position: Vector2
+	var is_valid_position: bool = false
+	var attempts: int = 100  # Limit the number of attempts to avoid infinite loops
 	
-	# Generate in a random position around the player
-	var spawn_x = player_current_position.x + randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS)
-	var spawn_y = - player_current_position.y + randf_range(- 80, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
+	while not is_valid_position and attempts > 0:
+		# Generate a random position for the debuff
+		var spawn_x = player_current_position.x + randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS)
+		var spawn_y = - player_current_position.y + randf_range(- 80, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
+		spawn_position = Vector2(spawn_x, spawn_y)
+		
+		# Clamp the spawn position to remain within the background bounds
+		spawn_position.x = clamp(spawn_position.x, -SIDE + 30, SIDE - 30)
+		spawn_position.y = clamp(spawn_position.y, player_current_position.y - 80, LNG / 2)
+		
+		# Check if the position is valid (distance from the buff)
+		if spawn_position.distance_to(buff_spawn_position) >= 35.0:
+			is_valid_position = true
+		else:
+			attempts -= 1  # Reduce attempts to prevent infinite loops
 	
-	# Clamp the spawn position to ensure it remains within background bounds
-	spawn_x = clamp(spawn_x, -SIDE + 30, SIDE - 30)  # Clamp X to stay within left/right bounds
-	spawn_y = clamp(spawn_y, player_current_position.y - 80, LNG / 2)  # Clamp Y to stay forward and within bounds
+	if is_valid_position:
 	
-	var spawn_position = Vector2(spawn_x, spawn_y)
-	
-	# Instance the Supercharge Buff and add it to the scene
-	var supercharge_debuff = DEBUFF_SCENE.instantiate()
-	add_child(supercharge_debuff)
-	supercharge_debuff.global_position = spawn_position
+		# Instance the Supercharge Buff and add it to the scene
+		var supercharge_debuff = DEBUFF_SCENE.instantiate()
+		add_child(supercharge_debuff)
+		supercharge_debuff.global_position = spawn_position
 
 func _on_SuperchargeSpawn_Timer_timeout() -> void:
 	spawn_supercharge_buff()

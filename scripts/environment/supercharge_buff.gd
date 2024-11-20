@@ -1,6 +1,6 @@
 extends Area2D
 
-@export var duration: float = 20.0  # Buff duration in seconds
+@export var duration: float = 9.0  # Buff duration in seconds
 @export var heal_amount: int = 25
 
 @onready var pickup_sound: AudioStreamPlayer2D = $PickupSound

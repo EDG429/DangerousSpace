@@ -2,7 +2,7 @@ class_name Enemy
 extends CharacterBody2D
 
 # Export Variables
-@export var SPEED: float = 175.0  # Movement speed
+@export var SPEED: float = 160.0  # Movement speed
 @export var MAX_HP: int = 50     # Enemy health
 @export var BOUNTY: int = 50     # Points awarded for destroying this enemy
 @export var BULLET_SCENE: PackedScene = preload("res://Scenes/Enemies/enemy_bullet.tscn")  # Bullet scene for enemy fire
@@ -120,6 +120,9 @@ func die() -> void:
 	debuff_particles_1.emitting = false
 	debuff_particles_2.emitting = false
 	
+	# Disable health bar
+	health_bar.visible = false
+	
 	on_enemy_damage_sound.play()
 	on_enemy_explosion_sound.play()
 	animated_sprite.play("death")
@@ -217,6 +220,9 @@ func _on_Debuff_Timer_Timeout() -> void:
 	debuff_particles_2.emitting = false
 
 func heal(heal_amount: int) -> void:
+	if not health_bar or health <= 0:
+		return
+	
 	health = clamp(health + heal_amount, 0, MAX_HP)
 	if health_bar:
 		health_bar.set_health(health)

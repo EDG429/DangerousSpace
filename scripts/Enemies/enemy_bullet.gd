@@ -1,6 +1,6 @@
 extends Area2D
 # PRIMARY FIRE BULLET
-@export var SPEED: float = 400.0  # Projectile speed
+@export var SPEED: float = 450.0  # Projectile speed
 @export var DAMAGE: int = 10     # Damage dealt to enemies
 @export var MAX_DISTANCE: int = 500 # Maximum distance from the player before removal
 

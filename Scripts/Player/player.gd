@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 # Export vars
-@export var SPEED: float = 175.0  # Movement speed of the spaceship
+@export var SPEED: float = 160.0  # Movement speed of the spaceship
 @export var MAX_HP: int = 100    # Maximum hit points of the player
 @export var DODGE_SPEED: float = 500.0  # Speed boost when dodging
 @export var DODGE_DISTANCE: float = 25.0  # Distanced traveled while dodging
@@ -371,6 +371,9 @@ func _on_Debuff_Timer_Timeout() -> void:
 	debuff_particles_2.emitting = false
 
 func heal(heal_amount: int) -> void:
+	if not health_bar or health <=0:
+		return
+	
 	health = clamp(health + heal_amount, 0, MAX_HP)
 	if health_bar:
 		health_bar.set_health(health)
