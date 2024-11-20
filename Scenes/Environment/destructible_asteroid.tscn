@@ -8,7 +8,6 @@
 radius = 25.1794
 
 [node name="Asteroid1" type="Sprite2D"]
-scale = Vector2(2.53603, 2.53603)
 texture = ExtResource("1_8vq5t")
 region_rect = Rect2(64, 192, 48, 48)
 script = ExtResource("2_ni7y6")

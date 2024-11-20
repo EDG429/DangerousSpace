@@ -2,8 +2,8 @@ class_name Asteroid
 
 extends Sprite2D
 
-@export var damage: int = 25  # Default damage the asteroid deals
-@export var MAX_HP: int = 50    # Maximum hit points of the asteroid
+@export var damage: int = 25 # Default damage the asteroid deals
+@export var MAX_HP: int = 50 # Maximum hit points of the asteroid
 
 @onready var asteroid: Asteroid = $"."
 @onready var damage_feedback_timer: Timer = $DamageFeedback_Timer
@@ -13,6 +13,7 @@ var is_taking_damage: bool = false
 
 var health: int
 var is_dead: bool
+var velocity = Vector2.ZERO
 
 func _ready() -> void:
 	health = MAX_HP
@@ -30,7 +31,7 @@ func _on_Asteroid_body_entered(body: Node) -> void:
 func take_damage(damage_amount: int):
 	
 	if is_dead:
-		return  # Ignore damage if dead
+		return # Ignore damage if dead
 	
 	health -= damage_amount
 	health = clamp(health, 0, MAX_HP)
@@ -47,10 +48,16 @@ func flicker() -> void:
 	damage_feedback_timer.start()
 
 func _on_DamageFeedbackTimer_timeout() -> void:
-	asteroid.modulate = Color(1, 1, 1)  # Revert the sprite color to normal
+	asteroid.modulate = Color(1, 1, 1) # Revert the sprite color to normal
 	is_taking_damage = false
 
 func explode() -> void:
 	is_dead = true
 	ScoreManager.add_points(50)
 	queue_free()
+
+func _process(delta: float) -> void:
+	position += velocity * delta
+
+func set_velocity(new_velocity: Vector2) -> void:
+	velocity = new_velocity
