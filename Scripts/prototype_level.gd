@@ -186,7 +186,7 @@ func spawn_supercharge_debuff() -> void:
 	var player_current_position = player.global_position
 	var spawn_position: Vector2
 	var is_valid_position: bool = false
-	var attempts: int = 100  # Limit the number of attempts to avoid infinite loops
+	var attempts: int = 999  # Limit the number of attempts to avoid infinite loops
 	
 	while not is_valid_position and attempts > 0:
 		# Generate a random position for the debuff
