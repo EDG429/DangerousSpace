@@ -24,7 +24,7 @@ func _physics_process(delta: float) -> void:
 
 func _on_body_entered(body: Node) -> void:
 	#print(self, " has collided with ",body.name )
-	if body.name == "Enemy":
+	if body is Enemy:
 		return
 		
 	# Handle collision with an enemy

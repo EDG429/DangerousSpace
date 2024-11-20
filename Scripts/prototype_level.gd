@@ -63,7 +63,7 @@ func _ready() -> void:
 		else:
 			print("Error! No camera detected")
 	
-	spawn_wave()  # Immediately spawn the first wave
+	
 	start_spawn_timer() # Immediately start the spawn timer
 	
 	# Start the supercharge buff spawn timer
@@ -132,7 +132,7 @@ func get_valid_spawn_position(existing_positions: Array) -> Vector2:
 	
 	return Vector2.ZERO
 	
-# ----------------------------- Enemy Spawn Logic Start ---------------------------------- #
+# ----------------------------- Enemy Spawn Logic End  ---------------------------------- #
 
 func _process(_delta: float) -> void:
 	
