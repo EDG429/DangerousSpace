@@ -4,7 +4,8 @@
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q77gi"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_1k2c6"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w6uul"]
+size = Vector2(1433.5, 13.5)
 
 [node name="StaticBody2D" type="StaticBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_q77gi")
@@ -13,5 +14,6 @@ physics_material_override = SubResource("PhysicsMaterial_q77gi")
 texture = ExtResource("1_8atcs")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -24)
-shape = SubResource("WorldBoundaryShape2D_1k2c6")
+position = Vector2(1.75, -19.75)
+shape = SubResource("RectangleShape2D_w6uul")
+one_way_collision = true

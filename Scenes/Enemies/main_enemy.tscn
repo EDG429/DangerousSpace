@@ -108,7 +108,7 @@ point_count = 3
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_jah4l")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["enemies"]]
 rotation = 3.14159
 sprite_frames = SubResource("SpriteFrames_oo1q8")
 animation = &"idle"

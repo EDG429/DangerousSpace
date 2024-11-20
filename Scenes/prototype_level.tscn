@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://8e7x38lhgn60" path="res://Scenes/Environment/deadline.tscn" id="5_x2l07"]
 [ext_resource type="Texture2D" uid="uid://b243wxpqsmc3q" path="res://Assets/Sprites/ships_asteroids.png" id="7_0kqip"]
 [ext_resource type="Texture2D" uid="uid://dgcildwfp2t0s" path="res://Assets/Backgrounds/Space_Background3.png" id="8_0xopf"]
-[ext_resource type="PackedScene" path="res://Scenes/Environment/FinishLine.tscn" id="10_6u837"]
+[ext_resource type="PackedScene" uid="uid://j2m5dijc4bgm" path="res://Scenes/Environment/FinishLine.tscn" id="10_6u837"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xw1nj"]
 texture = ExtResource("7_0kqip")

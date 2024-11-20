@@ -1,6 +1,7 @@
-[gd_scene load_steps=36 format=3 uid="uid://gvwfoa4u7kbt"]
+[gd_scene load_steps=45 format=3 uid="uid://gvwfoa4u7kbt"]
 
 [ext_resource type="Texture2D" uid="uid://btq72cp7d4yi4" path="res://Assets/Sprites/Boss/BossAwakening01.png" id="1_2jtha"]
+[ext_resource type="Script" path="res://scripts/Enemies/boss.gd" id="1_pc70t"]
 [ext_resource type="Texture2D" uid="uid://7nib8uwbi06g" path="res://Assets/Sprites/Boss/BossAwakening02.png" id="2_7pu4a"]
 [ext_resource type="Texture2D" uid="uid://delpxmp4qslhu" path="res://Assets/Sprites/Boss/BossAwakening03.png" id="3_ooov5"]
 [ext_resource type="Texture2D" uid="uid://dp1umx4ewj5p3" path="res://Assets/Sprites/Boss/BossAwakening04.png" id="4_x166p"]
@@ -33,6 +34,9 @@
 [ext_resource type="Texture2D" uid="uid://b7dqnkfxfd8ni" path="res://Assets/Sprites/Boss/BossIdle01.png" id="31_ltf5f"]
 [ext_resource type="Texture2D" uid="uid://btmrefap8l8hp" path="res://Assets/Sprites/Boss/BossIdle02.png" id="32_gcoho"]
 [ext_resource type="Texture2D" uid="uid://b33qqxhx4x2yg" path="res://Assets/Sprites/Boss/BossIdle03.png" id="33_p0eg8"]
+[ext_resource type="PackedScene" uid="uid://b2fde3mnc20fv" path="res://Scenes/Player/healthbar.tscn" id="35_etiog"]
+[ext_resource type="AudioStream" uid="uid://bo5eabux6qg0w" path="res://Assets/SFX/sfx_BulletImpactOnEnemy.wav" id="36_g04nk"]
+[ext_resource type="AudioStream" uid="uid://1vn33nik6uln" path="res://Assets/SFX/sfx_EnemyExplosion.wav" id="37_ogf0w"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6mr74"]
 animations = [{
@@ -97,6 +101,12 @@ animations = [{
 "texture": ExtResource("10_fk1u0")
 }, {
 "duration": 1.0,
+"texture": ExtResource("10_fk1u0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_fk1u0")
+}, {
+"duration": 1.0,
 "texture": ExtResource("11_bwwnf")
 }, {
 "duration": 1.0,
@@ -156,7 +166,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("30_ifdow")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 10.0
 }, {
@@ -173,20 +183,143 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("32_gcoho")
 }],
-"loop": false,
+"loop": true,
 "name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_2jtha")
+}],
+"loop": false,
+"name": &"sleep",
 "speed": 5.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_m7h3h"]
 radius = 50.0
 
-[node name="Boss" type="CharacterBody2D"]
+[sub_resource type="Curve" id="Curve_cbsj0"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.578947, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_2wwtt"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.578947, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_w1r27"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.578947, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_hewvw"]
+min_value = -200.0
+max_value = 200.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.578947, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pbdwr"]
+size = Vector2(1288, 192)
+
+[node name="Boss" type="CharacterBody2D" groups=["enemies"]]
+scale = Vector2(3, 3)
+script = ExtResource("1_pc70t")
+SPEED = 90.0
+MAX_HP = 10000
+BOUNTY = 1000
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_6mr74")
-animation = &"death"
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -3)
 shape = SubResource("CircleShape2D_m7h3h")
+
+[node name="Fire_Timer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="Healthbar" parent="." instance=ExtResource("35_etiog")]
+offset_left = 68.0
+offset_top = -61.0
+offset_right = 199.0
+offset_bottom = -53.0
+rotation = -3.14159
+
+[node name="DamageFlicker_Timer" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="OnEnemyDamage_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("36_g04nk")
+
+[node name="OnEnemyExplosion_Sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("37_ogf0w")
+
+[node name="Supercharge_Particles1" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 50
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 43.66
+spread = 119.55
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("Curve_cbsj0")
+color = Color(1, 1, 0.45098, 1)
+
+[node name="Supercharge_Particles2" type="CPUParticles2D" parent="Supercharge_Particles1"]
+emitting = false
+amount = 50
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 43.66
+spread = 119.55
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("Curve_2wwtt")
+color = Color(0.924349, 0.975658, 1, 1)
+
+[node name="Supercharge_Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="Debuff_Particles1" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 50
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 43.66
+spread = 119.55
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("Curve_w1r27")
+color = Color(1, 0, 0, 1)
+
+[node name="Debuff_Particles2" type="CPUParticles2D" parent="Debuff_Particles1"]
+emitting = false
+amount = 50
+local_coords = true
+emission_shape = 1
+emission_sphere_radius = 43.66
+spread = 119.55
+radial_accel_min = -100.0
+radial_accel_max = -100.0
+radial_accel_curve = SubResource("Curve_hewvw")
+color = Color(0.924349, 0.975658, 1, 1)
+
+[node name="Debuff_Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="AwakenZone" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AwakenZone"]
+position = Vector2(44, 0)
+shape = SubResource("RectangleShape2D_pbdwr")
+
+[connection signal="timeout" from="Fire_Timer" to="." method="_on_Boss_FireTimer_timeout"]
+[connection signal="body_entered" from="AwakenZone" to="." method="_on_awaken_zone_body_entered"]

@@ -3,6 +3,7 @@ extends Node2D
 
 const player_scene = preload("res://Scenes/Player/player.tscn")
 const enemy_scene = preload("res://Scenes/Enemies/main_enemy.tscn")
+const boss_scene = preload("res://Scenes/Enemies/boss.tscn")
 const MIN_SCALE = 0.5  # Minimum scale of the asteroid
 const MAX_SCALE = 1.5  # Maximum scale of the asteroid
 
@@ -39,6 +40,9 @@ var active_enemies: Array = []  # Keep track of spawned enemies
 const MIN_DISTANCE_BETWEEN_ASTEROIDS = 50.0 # Minimum distance to avoid overlap
 const ASTEROID_SPEED = 200.0 # Speed of the asteroid moving towards the player
 
+# Boss boolean flags
+var boss_spawned: bool = false  # Track if the boss has already spawned
+
 # Variables for camera clamping
 var SIDE: int = 0.0  # Width of the texture divided by two
 var LNG: int = 0.0   # Full height (length) of the texture
@@ -70,6 +74,8 @@ func _ready() -> void:
 		else:
 			print("Error! No camera detected")
 	
+	if boss_scene:
+		spawn_boss()
 	
 	start_spawn_timer() # Immediately start the spawn timer
 	
@@ -186,7 +192,7 @@ func spawn_supercharge_debuff() -> void:
 	var player_current_position = player.global_position
 	var spawn_position: Vector2
 	var is_valid_position: bool = false
-	var attempts: int = 999  # Limit the number of attempts to avoid infinite loops
+	var attempts: int = 9999  # Limit the number of attempts to avoid infinite loops
 	
 	while not is_valid_position and attempts > 0:
 		# Generate a random position for the debuff
@@ -307,8 +313,24 @@ func _on_Deadline_Move_Timer_timeout() -> void:
 
 # ---------------------- Game Over Logic Start --------------------------------------- #
 func _on_game_over(reason: String) -> void:
-
 	active_enemies.clear()
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		enemy.queue_free()
 	
+# ---------------------- Level Cleaning Logic End ------------------------------------------- #
+
+# ---------------------- Boss Handling Logic Start ------------------------------------------ #
+func spawn_boss() -> void:
+	# Ensure that the boss is spawned only once
+	if boss_spawned:
+		return
 	
-# ---------------------- Level Cleaning Logic ------------------------------------------- #
+	boss_spawned = true
+	
+	# Instance and add the boss to the scene
+	var boss_instance = boss_scene.instantiate()
+	add_child(boss_instance)
+	
+	# Position the boss (e.g., above the player)
+	var boss_position = player.global_position + Vector2(0, -1500)  # Adjust the offset as needed
+	boss_instance.global_position = boss_position

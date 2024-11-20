@@ -33,6 +33,10 @@ window/stretch/mode="canvas_items"
 
 enabled=PackedStringArray("res://addons/BulletUpHell/plugin.cfg")
 
+[global_group]
+
+enemies=""
+
 [input]
 
 ui_left={

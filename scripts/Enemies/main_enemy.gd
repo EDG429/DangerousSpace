@@ -154,8 +154,7 @@ func fire() -> void:
 	bullet_sprite.flip_v = true if animated_sprite.flip_v == false else false
 	
 func _on_FireTimer_timeout() -> void:
-	if player:
-		pass
+	if player and not is_dead:
 		fire()
 # -------------------------- Firing Logic End --------------------------- #
 
