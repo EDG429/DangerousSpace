@@ -11,7 +11,6 @@ const MAX_SCALE = 1.5  # Maximum scale of the asteroid
 @onready var asteroid_spawn_timer: Timer = $AsteroidSpawn_Timer
 @onready var background: Sprite2D = $Background
 @onready var deadline: StaticBody2D = $Deadline
-@onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 @export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 7.0
 @export var SUPERCHARGE_BUFF_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff

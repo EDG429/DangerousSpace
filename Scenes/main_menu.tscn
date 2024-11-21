@@ -33,6 +33,7 @@ size_flags_vertical = 4
 [node name="Start" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 focus_neighbor_top = NodePath("../Quit")
+theme_override_font_sizes/font_size = 0
 text = "Start"
 
 [node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
@@ -69,7 +70,7 @@ offset_top = 562.0
 offset_right = 768.0
 offset_bottom = 1203.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
+theme_override_constants/outline_size = 5
 text = "You've entered developement Hell.
 
 Every story point assigned to you feels like an enemy ship trying to shoot you down, and every meeting feels like an asteroid you would rather avoid.

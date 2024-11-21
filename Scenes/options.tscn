@@ -48,13 +48,12 @@ theme_override_fonts/font = SubResource("SystemFont_8fymc")
 text = "Quit to menu"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
-layout_mode = 0
-offset_left = 59.0
-offset_top = 126.0
-offset_right = 707.0
-offset_bottom = 616.0
+offset_left = 54.0
+offset_top = 93.0
+offset_right = 730.0
+offset_bottom = 571.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 15
+theme_override_constants/outline_size = 5
 text = "This game was designed, developed, and tested by 3 friends. EDG, Wrench, and Isek.
 
 Assets for backgrounds, bullets:
