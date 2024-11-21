@@ -72,9 +72,6 @@ func _ready() -> void:
 			camera.limit_top = -LNG/2
 			camera.limit_bottom = LNG/2
 		
-		if audio_stream_player_2d:
-			audio_stream_player_2d.global_position = player.global_position
-		
 		else:
 			print("Error! No camera detected")
 	

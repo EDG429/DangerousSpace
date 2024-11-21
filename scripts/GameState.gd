@@ -1,7 +1,6 @@
 extends Node
 
 signal game_over
-signal player_death
 
 var player_is_dead: bool = false  # Track if the player is dead
 
