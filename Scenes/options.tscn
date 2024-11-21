@@ -57,8 +57,11 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 text = "This game was designed, developed, and tested by 3 friends. EDG, Wrench, and Isek.
 
-Assets for backgrounds, bullets:
+Assets for some bullets:
 AI Generated
+
+Level backgroud:
+https://deep-fold.itch.io/space-background-generator
 
 Assets for ships and asteroids:
 https://opengameart.org/content/shmup-ships
