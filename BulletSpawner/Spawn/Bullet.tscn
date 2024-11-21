@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://clofttcqupqei"]
+
+[ext_resource type="Script" path="res://BulletSpawner/Spawn/Bullet.gd" id="1_02kte"]
+[ext_resource type="Texture2D" uid="uid://oubvgotvfvqe" path="res://BulletSpawner/Spawn/circle.png" id="2_s14yk"]
+
+[sub_resource type="CircleShape2D" id="1"]
+radius = 3.84563
+
+[node name="Bullet" type="Area2D"]
+rotation = -0.785398
+script = ExtResource("1_02kte")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("2_s14yk")
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_Bullet_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

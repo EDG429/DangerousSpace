@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://gvwfoa4u7kbt"]
+[gd_scene load_steps=47 format=3 uid="uid://bd2fyncpysav2"]
 
 [ext_resource type="Texture2D" uid="uid://btq72cp7d4yi4" path="res://Assets/Sprites/Boss/BossAwakening01.png" id="1_2jtha"]
 [ext_resource type="Script" path="res://scripts/Enemies/boss.gd" id="1_pc70t"]
@@ -339,5 +339,8 @@ shape = SubResource("RectangleShape2D_pbdwr")
 
 [node name="OnEnemyExplosion_Sound" type="AudioStreamPlayer2D" parent="."]
 
+[node name="secondaryTimer" type="Timer" parent="."]
+
 [connection signal="timeout" from="Fire_Timer" to="." method="_on_Boss_FireTimer_timeout"]
 [connection signal="body_entered" from="AwakenZone" to="." method="_on_awaken_zone_body_entered"]
+[connection signal="timeout" from="secondaryTimer" to="." method="_on_secondary_timer_timeout"]
