@@ -317,8 +317,15 @@ func _on_Deadline_Move_Timer_timeout() -> void:
 # ---------------------- Game Over Logic Start --------------------------------------- #
 func _on_game_over(reason: String) -> void:
 	active_enemies.clear()
-	for enemy in get_tree().get_nodes_in_group("enemies"):
-		enemy.queue_free()
+	
+	if not get_tree():
+		return
+	
+	var enemies = get_tree().get_nodes_in_group("enemies") 
+	
+	for enemy in enemies:
+		if is_instance_valid(enemy):
+			enemy.queue_free()
 	
 # ---------------------- Level Cleaning Logic End ------------------------------------------- #
 
@@ -335,5 +342,5 @@ func spawn_boss() -> void:
 	add_child(boss_instance)
 	
 	# Position the boss (e.g., above the player)
-	var boss_position = player.global_position + Vector2(0, -2500)  # Adjust the offset as needed
+	var boss_position = player.global_position + Vector2(0, -6834)  # Adjust the offset as needed
 	boss_instance.global_position = boss_position

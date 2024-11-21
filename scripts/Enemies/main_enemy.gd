@@ -168,6 +168,7 @@ func _on_FireTimer_timeout() -> void:
 
 func apply_supercharge_buff(duration: float) -> void:
 	if is_supercharged:
+		supercharge_timer.start()
 		return # Avoid stacking the buff
 	
 	is_supercharged = true
@@ -197,6 +198,7 @@ func _on_Supercharge_Timer_Timeout() -> void:
 
 func apply_supercharge_debuff(duration: float) -> void:
 	if is_downcharged:
+		debuff_timer.start()
 		return # Avoid stacking the buff
 	#
 	is_downcharged = true

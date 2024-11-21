@@ -49,7 +49,7 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8xgvl"]
 height = 40.0
 
-[node name="BossMissile" type="Area2D"]
+[node name="BossMissile" type="Area2D" groups=["enemies"]]
 scale = Vector2(3, 3)
 script = ExtResource("1_avprq")
 SPEED = 500.0

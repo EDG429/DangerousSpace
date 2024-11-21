@@ -291,7 +291,6 @@ func dodge() -> void:
 		dodge_cooldown_timer.start(DODGE_COOLDOWN)
 	
 	else:
-		print("Dodge on cooldown!")
 		cannot_dodge_sound.play()
 
 func _on_Dodge_Timer_timeout() -> void:
@@ -317,6 +316,7 @@ func make_invulnerable(enabled: bool) -> void:
 
 func apply_supercharge_buff(duration: float) -> void:
 	if is_supercharged:
+		supercharge_timer.start(duration)
 		return # Avoid stacking the buff
 	
 	is_supercharged = true
@@ -329,7 +329,7 @@ func apply_supercharge_buff(duration: float) -> void:
 	supercharge_particles_1.emitting = true
 	supercharge_particles_2.emitting = true
 	
-	# Start the buff timer
+	# Start the buff timera
 	supercharge_timer.start(duration)
 
 func _on_supercharge_timer_Timeout() -> void:
@@ -347,6 +347,7 @@ func _on_supercharge_timer_Timeout() -> void:
 
 func apply_supercharge_debuff(duration: float) -> void:
 	if is_downcharged:
+		supercharge_timer.start(duration)
 		return # Avoid stacking the buff
 	
 	is_downcharged = true

@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="1"]
 radius = 3.84563
 
-[node name="Bullet" type="Area2D"]
+[node name="Bullet" type="Area2D" groups=["enemies"]]
 rotation = -0.785398
 script = ExtResource("1_02kte")
 

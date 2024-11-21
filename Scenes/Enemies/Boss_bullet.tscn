@@ -6,7 +6,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_y2mt4"]
 radius = 7.14286
 
-[node name="BossBullet" type="Area2D" groups=["PlayerBullets"]]
+[node name="BossBullet" type="Area2D" groups=["PlayerBullets", "enemies"]]
 scale = Vector2(3, 3)
 script = ExtResource("1_bhqnj")
 SPEED = 600.0
