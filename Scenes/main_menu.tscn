@@ -64,11 +64,22 @@ texture = ExtResource("2_u3hou")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_left = 476.0
-offset_top = 590.0
-offset_right = 755.0
-offset_bottom = 926.0
-text = "You've"
+offset_left = 437.0
+offset_top = 562.0
+offset_right = 768.0
+offset_bottom = 1203.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+text = "You've entered developement Hell.
+
+Every story point assigned to you feels like an enemy ship trying to shoot you down, and every meeting feels like an asteroid you would rather avoid.
+
+Push forward in your tiny but mighty ship, don't stay behind the deadline and you may overcome the odds in one piece...
+
+Use the WASD keys to move around
+Use the space bar to dodge
+Left click for primary fire
+Right click for secondary fire"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Start" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]

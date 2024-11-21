@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5thh03kvj54g"]
+[gd_scene load_steps=5 format=3 uid="uid://b5thh03kvj54g"]
 
 [ext_resource type="Script" path="res://scripts/options.gd" id="1_k8kli"]
+[ext_resource type="Texture2D" uid="uid://bchvtarv5v3pd" path="res://Assets/Backgrounds/CreditsScreen.png" id="2_ce8wi"]
 
 [sub_resource type="SystemFont" id="SystemFont_1eegv"]
 
@@ -15,12 +16,18 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_k8kli")
 
+[node name="CreditsScreen" type="Sprite2D" parent="."]
+position = Vector2(351, 360)
+texture = ExtResource("2_ce8wi")
+
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
 theme_override_fonts/font = SubResource("SystemFont_1eegv")
 theme_override_font_sizes/font_size = 50
 text = "Credits"
@@ -46,6 +53,8 @@ offset_left = 59.0
 offset_top = 126.0
 offset_right = 707.0
 offset_bottom = 616.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
 text = "This game was designed, developed, and tested by 3 friends. EDG, Wrench, and Isek.
 
 Assets for backgrounds, bullets:
@@ -56,6 +65,9 @@ https://opengameart.org/content/shmup-ships
 
 SFX assets from:
 The Essential Retro Video Game Sound Effects Collection [512 sounds] By Juhani Junkala
+
+Level music:
+https://www.fesliyanstudios.com/royalty-free-music/download/boss-time/2340
 
 Other assets were hand-made
 

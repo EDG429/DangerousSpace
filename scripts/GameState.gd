@@ -72,4 +72,3 @@ func clear_references() -> void:
 
 func mark_player_dead() -> void:
 	player_is_dead = true
-	emit_signal("player_died")

@@ -11,6 +11,7 @@ const MAX_SCALE = 1.5  # Maximum scale of the asteroid
 @onready var asteroid_spawn_timer: Timer = $AsteroidSpawn_Timer
 @onready var background: Sprite2D = $Background
 @onready var deadline: StaticBody2D = $Deadline
+@onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 @export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 7.0
 @export var SUPERCHARGE_BUFF_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
@@ -71,6 +72,10 @@ func _ready() -> void:
 			camera.limit_right = SIDE  
 			camera.limit_top = -LNG/2
 			camera.limit_bottom = LNG/2
+		
+		if audio_stream_player_2d:
+			audio_stream_player_2d.global_position = player.global_position
+		
 		else:
 			print("Error! No camera detected")
 	
@@ -181,8 +186,6 @@ func spawn_supercharge_buff() -> Vector2:
 	add_child(supercharge_buff)
 	supercharge_buff.global_position = buff_spawn_position
 	supercharge_buff.z_index = 1
-	print("Buff visibility: ", supercharge_buff.visible)
-	print("Buff y position: ", supercharge_buff.global_position.y)
 	
 	return buff_spawn_position
 

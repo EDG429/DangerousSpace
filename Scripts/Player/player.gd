@@ -39,7 +39,7 @@ extends CharacterBody2D
 @onready var camera_2d: Camera2D = $Camera2D
 @onready var debuff_particles_1: CPUParticles2D = $Debuff_Particles1
 @onready var debuff_particles_2: CPUParticles2D = $Debuff_Particles1/Debuff_Particles2
-
+@onready var level_music: AudioStreamPlayer2D = $LevelMusic
 
 
 # Boolean flags
@@ -238,6 +238,7 @@ func _on_ScreenShakeTimer_timeout() -> void:
 func die() -> void:
 	animated_sprite.play("death")
 	on_player_death_sound.play()
+	level_music.stop()
 	
 	# Disable collisions
 	self.set_collision_layer(0)

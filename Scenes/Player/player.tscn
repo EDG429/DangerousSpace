@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=31 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_ysrji"]
 [ext_resource type="Texture2D" uid="uid://b700d46as0106" path="res://Assets/Sprites/Sprite-player_dodge_01.png" id="2_t56qb"]
@@ -22,6 +22,7 @@
 [ext_resource type="AudioStream" uid="uid://beldaubumc3dx" path="res://Assets/SFX/sfx_exp_PlayerDeath.wav" id="19_kw3no"]
 [ext_resource type="AudioStream" uid="uid://d0ji1ekt6xd2x" path="res://Assets/SFX/sfx_OnDodge.wav" id="20_0fcad"]
 [ext_resource type="AudioStream" uid="uid://dhdqdnc8r02ko" path="res://Assets/SFX/sfx_CannotDodge.wav" id="21_63i8l"]
+[ext_resource type="AudioStream" uid="uid://bjobmr0rp7ann" path="res://Assets/Music/2021-08-30_-_Boss_Time_-_www.FesliyanStudios.com.mp3" id="23_m4jv0"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hppht"]
 resource_local_to_scene = true
@@ -252,6 +253,10 @@ radial_accel_min = -100.0
 radial_accel_max = -100.0
 radial_accel_curve = SubResource("Curve_qtl5h")
 color = Color(0.924349, 0.975658, 1, 1)
+
+[node name="LevelMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("23_m4jv0")
+autoplay = true
 
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]
