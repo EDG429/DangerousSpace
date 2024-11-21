@@ -1,5 +1,8 @@
 extends Enemy
 class_name Boss
+
+@export var BOSS_BULLET_SCENE: PackedScene = preload("res://Scenes/Enemies/Boss_bullet.tscn")
+
 @onready var awaken_zone: Area2D = $AwakenZone
 @onready var awakening_sound: AudioStreamPlayer2D = $AwakeningSound
 @onready var shutdown_sound: AudioStreamPlayer2D = $ShutdownSound
@@ -87,7 +90,7 @@ func fire() -> void:
 		return
 
 	# Create and fire a bullet at the player
-	var bullet = BULLET_SCENE.instantiate()
+	var bullet = BOSS_BULLET_SCENE.instantiate()
 	get_parent().add_child(bullet)  # Add the bullet to the parent node
 	bullet.global_position = global_position
 	# Calculate bullet direction
