@@ -232,7 +232,7 @@ size = Vector2(1288, 216)
 scale = Vector2(3, 3)
 script = ExtResource("1_pc70t")
 SPEED = 90.0
-MAX_HP = 5000
+MAX_HP = 6500
 BOUNTY = 3000
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -340,8 +340,10 @@ shape = SubResource("RectangleShape2D_pbdwr")
 [node name="OnEnemyExplosion_Sound" type="AudioStreamPlayer2D" parent="."]
 
 [node name="secondaryTimer" type="Timer" parent="."]
+wait_time = 0.75
 
 [node name="MissileTimer" type="Timer" parent="."]
+wait_time = 0.75
 
 [connection signal="timeout" from="Fire_Timer" to="." method="_on_Boss_FireTimer_timeout"]
 [connection signal="body_entered" from="AwakenZone" to="." method="_on_awaken_zone_body_entered"]

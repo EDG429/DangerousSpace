@@ -338,6 +338,6 @@ func spawn_boss() -> void:
 	var boss_instance = boss_scene.instantiate()
 	add_child(boss_instance)
 	
-	# Position the boss (e.g., above the player)
-	var boss_position = player.global_position + Vector2(0, -6834)  # Adjust the offset as needed
+	# Setting the boss position
+	var boss_position = Vector2(0, -6834)  
 	boss_instance.global_position = boss_position
