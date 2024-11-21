@@ -44,12 +44,12 @@ const ASTEROID_SPEED = 200.0 # Speed of the asteroid moving towards the player
 var boss_spawned: bool = false  # Track if the boss has already spawned
 
 # Variables for camera clamping
-var SIDE: int = 0.0  # Width of the texture divided by two
-var LNG: int = 0.0   # Full height (length) of the texture
+var SIDE: float = 0.0  # Width of the texture divided by two
+var LNG: float = 0.0   # Full height (length) of the texture
 
 func _ready() -> void:
 	# Get the Sprite2D node named "Background"
-	var background = get_node("Background") as Sprite2D
+	background = get_node("Background") as Sprite2D
 	
 	if background and background.texture:
 		# Get the dimensions of the texture
@@ -279,17 +279,17 @@ func spawn_asteroid() -> void:
 		# Start cleanup coroutine for the asteroid
 		remove_asteroid_after_delay(spawned_asteroid, 20.0)
 
-func remove_asteroid_after_delay(asteroid: Node, delay: float) -> void:
+func remove_asteroid_after_delay(asteroid_removed: Node, delay: float) -> void:
 	await get_tree().create_timer(delay).timeout
 	
 	# Ensure the asteroid is still valid before freeing it
-	if is_instance_valid(asteroid):
+	if is_instance_valid(asteroid_removed):
 		# Remove position from the spawned positions list
-		for position in spawned_positions:
-			if asteroid.global_position.distance_to(position) < 1.0:  # Match positions
+		for pos in spawned_positions:
+			if asteroid_removed.global_position.distance_to(position) < 1.0:  # Match positions
 				spawned_positions.erase(position)
 				break
-		asteroid.queue_free()
+		asteroid_removed.queue_free()
 
 	
 func _on_AsteroidSpawn_Timer_timeout() -> void:
@@ -312,7 +312,7 @@ func _on_Deadline_Move_Timer_timeout() -> void:
 # ---------------------- Deadline Moving Logic End ----------------------------------- #
 
 # ---------------------- Game Over Logic Start --------------------------------------- #
-func _on_game_over(reason: String) -> void:
+func _on_game_over(_reason: String) -> void:
 	active_enemies.clear()
 	
 	if not get_tree():
@@ -320,7 +320,7 @@ func _on_game_over(reason: String) -> void:
 	
 	var enemies = get_tree().get_nodes_in_group("enemies") 
 	
-	for enemy in enemies:
+	for i in enemies:
 		if is_instance_valid(enemy):
 			enemy.queue_free()
 	

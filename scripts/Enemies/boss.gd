@@ -82,7 +82,7 @@ func _on_awaken_zone_body_entered(body: Node2D) -> void:
 		awaken_zone.queue_free()
 		awaken()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_dead or is_asleep or health <= 0 or player_dead: # Add 'is_asleep' to the condition
 		return
 

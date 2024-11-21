@@ -55,7 +55,7 @@ func _ready() -> void:
 	fire_timer.wait_time = FIRE_RATE
 	fire_timer.start()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	
 	if player_state == null or player_dead:
 		return

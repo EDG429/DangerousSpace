@@ -16,5 +16,5 @@ func _on_body_entered(body: Node) -> void:
 		GameState.emit_signal("game_over", game_end_message)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass

@@ -15,7 +15,7 @@ func _ready() -> void:
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
 
 func _on_body_entered(body: Node) -> void:
@@ -26,7 +26,8 @@ func _on_body_entered(body: Node) -> void:
 		sprite_2d.visible = false
 		cpu_particles_2d_2.emitting = false
 		cpu_particles_2d.emitting = false
-		collision_shape_2d.disabled
+		self.set_collision_layer(0)
+		self.set_collision_mask(0)
 		await pickup_sound.finished
 		queue_free()  # Remove the pickup object
 		
@@ -37,6 +38,7 @@ func _on_body_entered(body: Node) -> void:
 		sprite_2d.visible = false
 		cpu_particles_2d_2.emitting = false
 		cpu_particles_2d.emitting = false
-		collision_shape_2d.disabled
+		self.set_collision_layer(0)
+		self.set_collision_mask(0)
 		await pickup_sound.finished
 		queue_free()  # Remove the pickup object

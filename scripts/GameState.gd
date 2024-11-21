@@ -8,6 +8,7 @@ var player_is_dead: bool = false  # Track if the player is dead
 var player: Node = null
 var deadline: Node = null
 var finish_line: Node = null
+var enemies: Node = null
 
 # Background bounds
 @export var LNG: float = 15000.0  # The total height of the background
@@ -24,8 +25,7 @@ func _ready() -> void:
 	if finish_line and finish_line.has_signal("body_entered"):
 		finish_line.connect("body_entered", Callable(self, "_on_finish_line_entered"))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+
 
 # Check game over conditionswww
 func check_game_over() -> void:
@@ -67,6 +67,7 @@ func clear_references() -> void:
 	player = null
 	deadline = null
 	finish_line = null
+	enemies = null
 	print("GameState references cleared.")
 
 func mark_player_dead() -> void:
