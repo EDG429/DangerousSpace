@@ -28,7 +28,6 @@ func awaken() -> void:
 
 	is_awakening = false
 	is_asleep = false  # Boss is no longer asleep
-	health_bar.visible = true
 	collision_shape_2d.disabled = false
 
 	animated_sprite.play("idle")

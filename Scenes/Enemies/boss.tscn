@@ -232,8 +232,8 @@ size = Vector2(1288, 216)
 scale = Vector2(3, 3)
 script = ExtResource("1_pc70t")
 SPEED = 90.0
-MAX_HP = 1500
-BOUNTY = 1000
+MAX_HP = 5000
+BOUNTY = 3000
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_6mr74")
