@@ -1,4 +1,5 @@
 extends Area2D
+class_name EnemyBullet
 # PRIMARY FIRE BULLET
 @export var SPEED: float = 450.0  # Projectile speed
 @export var DAMAGE: int = 10     # Damage dealt to enemies
@@ -34,7 +35,6 @@ func _on_body_entered(body: Node) -> void:
 
 	# Handle collision with an Asteroid object
 	elif body is Asteroid:
-		print("touched an asteroid")
 		queue_free()
 
 func set_damage(multiplier: float) -> void:

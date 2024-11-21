@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=3 uid="uid://ca0xyyxanp601"]
+
+[ext_resource type="Script" path="res://scripts/Enemies/boss_missile.gd" id="1_avprq"]
+[ext_resource type="Texture2D" uid="uid://1xemxm0fx1rs" path="res://Assets/Sprites/Boss/BossCannon2.png" id="1_gykyv"]
+[ext_resource type="Texture2D" uid="uid://xq0iffbh34st" path="res://Assets/Sprites/Boss/BossCannon4.png" id="2_mdm6j"]
+[ext_resource type="Texture2D" uid="uid://b1af5wfmcx5ub" path="res://Assets/Sprites/Boss/BossCannon3.png" id="3_hhe4k"]
+[ext_resource type="Texture2D" uid="uid://cjjk14o61d8fy" path="res://Assets/Sprites/Boss/BossCannon1.png" id="4_21aqf"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kqvy0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_gykyv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_mdm6j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_hhe4k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_21aqf")
+}],
+"loop": false,
+"name": &"fire",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_21aqf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_hhe4k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_mdm6j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_hhe4k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_21aqf")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 15.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8xgvl"]
+height = 40.0
+
+[node name="BossMissile" type="Area2D"]
+script = ExtResource("1_avprq")
+SPEED = 600.0
+DAMAGE = 60
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_kqvy0")
+animation = &"idle"
+autoplay = "fire"
+frame_progress = 0.560562
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_8xgvl")

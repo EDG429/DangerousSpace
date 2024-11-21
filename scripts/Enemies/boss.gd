@@ -2,6 +2,7 @@ extends Enemy
 class_name Boss
 
 @export var BOSS_BULLET_SCENE: PackedScene = preload("res://Scenes/Enemies/Boss_bullet.tscn")
+@export var BOSS_MISSILE_SCENE: PackedScene = preload("res://Scenes/Enemies/BossMissile.tscn")
 
 @onready var awaken_zone: Area2D = $AwakenZone
 @onready var awakening_sound: AudioStreamPlayer2D = $AwakeningSound
