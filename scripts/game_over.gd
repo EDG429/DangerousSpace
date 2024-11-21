@@ -34,7 +34,11 @@ func _on_restart_pressed() -> void:
 	
 	# Reset the score and restart the game
 	ScoreManager.reset_score()
-	get_tree().change_scene_to_file(game_scene)
+	
+	#get_tree().change_scene_to_file(game_scene)
+	OS.shell_open(OS.get_executable_path())
+	await get_tree().create_timer(0.05).timeout
+	get_tree().quit()
 
 func _on_main_menu_pressed() -> void:
 	# Reset the score and return to the main menu
