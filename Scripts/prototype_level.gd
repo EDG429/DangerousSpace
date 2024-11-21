@@ -164,6 +164,13 @@ func spawn_supercharge_buff() -> Vector2:
 	if not player:
 		Vector2.ZERO # Need player to spawn
 	
+	if player.global_position.x <= -440 or player.global_position.x >= 440:
+		var supercharge_buff = SUPERCHARGE_BUFF_SCENE.instantiate()
+		add_child(supercharge_buff)
+		supercharge_buff.global_position = Vector2(0,player.global_position.y - 150)
+		buff_spawn_position = supercharge_buff.global_position
+		return buff_spawn_position
+	
 	# Fetch the player's current position
 	var player_current_position = player.global_position
 	
