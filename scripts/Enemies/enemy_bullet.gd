@@ -10,8 +10,8 @@ var player: Node = null # Ref to player
 
 
 func _ready() -> void:
-	
-	pass
+	# Ensure that the bullet is facing the player
+	rotate_towards_player()
 
 func _physics_process(delta: float) -> void:
 	# Move the projectile in the given directionda
@@ -36,6 +36,18 @@ func _on_body_entered(body: Node) -> void:
 	# Handle collision with an Asteroid object
 	elif body is Asteroid:
 		queue_free()
+
+func rotate_towards_player() -> void:
+	if player:
+		# Calculate the direction vector from the bullet to the player
+		var to_player: Vector2 = (player.global_position - global_position).normalized()
+		direction = to_player
+		
+		# Calculate the angle
+		var angle: float = to_player.angle()
+		
+		# Rotate the bullet
+		rotation = angle
 
 func set_damage(multiplier: float) -> void:
 	DAMAGE *= multiplier

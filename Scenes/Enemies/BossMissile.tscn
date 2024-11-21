@@ -50,15 +50,17 @@ animations = [{
 height = 40.0
 
 [node name="BossMissile" type="Area2D"]
+scale = Vector2(3, 3)
 script = ExtResource("1_avprq")
-SPEED = 600.0
+SPEED = 500.0
 DAMAGE = 60
+MAX_DISTANCE = 900
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_kqvy0")
 animation = &"idle"
 autoplay = "fire"
-frame_progress = 0.560562
+frame_progress = 0.758519
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_8xgvl")
