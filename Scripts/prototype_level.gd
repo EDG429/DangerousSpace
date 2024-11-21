@@ -184,45 +184,42 @@ func spawn_supercharge_buff() -> Vector2:
 	supercharge_buff.z_index = 1
 	
 	return buff_spawn_position
-
-func spawn_supercharge_debuff() -> void:
 	
+	
+func spawn_supercharge_debuff(buff_spawn_position: Vector2) -> void:
 	if not player:
-		return # Need player to spawn
+		return
 	
 	# Fetch the player's current position
 	var player_current_position = player.global_position
-	var spawn_position: Vector2
+	var debuff_spawn_position: Vector2
 	var is_valid_position: bool = false
-	var attempts: int = 9999  # Limit the number of attempts to avoid infinite loops
 	
-	while not is_valid_position and attempts > 0:
+	while not is_valid_position:
+		
 		# Generate a random position for the debuff
 		var spawn_x = player_current_position.x + randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS)
 		var spawn_y = - player_current_position.y + randf_range(- 150, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
-		spawn_position = Vector2(spawn_x, spawn_y)
+		debuff_spawn_position = Vector2(spawn_x, spawn_y)
 		
 		# Clamp the spawn position to remain within the background bounds
-		spawn_position.x = clamp(spawn_position.x, -SIDE + 30, SIDE - 30)
-		spawn_position.y = clamp(spawn_position.y, abs(player_current_position.y - 150), player_current_position.y + SUPERCHARGE_BUFF_SPAWN_RADIUS) if player_current_position.y > 0 else clamp(spawn_position.y, abs(player_current_position.y - 150), player_current_position.y - SUPERCHARGE_BUFF_SPAWN_RADIUS)
+		debuff_spawn_position.x = clamp(debuff_spawn_position.x, -SIDE + 30, SIDE - 30)
+		debuff_spawn_position.y = clamp(debuff_spawn_position.y, abs(player_current_position.y - 150), player_current_position.y + SUPERCHARGE_BUFF_SPAWN_RADIUS) if player_current_position.y > 0 else clamp(debuff_spawn_position.y, abs(player_current_position.y - 150), player_current_position.y - SUPERCHARGE_BUFF_SPAWN_RADIUS)
 		
 		# Check if the position is valid (distance from the buff)
-		if spawn_position.distance_to(buff_spawn_position) >= 35.0:
+		if buff_spawn_position.distance_to(debuff_spawn_position) >= 35:
 			is_valid_position = true
-		else:
-			attempts -= 1  # Reduce attempts to prevent infinite loops
-	
+			
 	if is_valid_position:
-	
 		# Instance the Supercharge Buff and add it to the scene
 		var supercharge_debuff = DEBUFF_SCENE.instantiate()
 		add_child(supercharge_debuff)
-		supercharge_debuff.global_position = spawn_position
+		supercharge_debuff.global_position = debuff_spawn_position
 		supercharge_debuff.z_index = 1
 
 func _on_SuperchargeSpawn_Timer_timeout() -> void:
 	spawn_supercharge_buff()
-	spawn_supercharge_debuff()
+	spawn_supercharge_debuff(buff_spawn_position)
 
 # ---------------------- Buff and Debuff Spawning Logic End  -------------------------------------- #
 
