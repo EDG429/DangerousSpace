@@ -257,6 +257,7 @@ color = Color(0.924349, 0.975658, 1, 1)
 [node name="LevelMusic" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("23_m4jv0")
 autoplay = true
+parameters/looping = true
 
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]
