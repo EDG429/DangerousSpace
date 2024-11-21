@@ -105,8 +105,9 @@ func _on_Boss_FireTimer_timeout() -> void:
 func die() -> void:
 	is_dead = true
 	
-	# Disable collisionshape
-	collision_shape_2d.disabled
+	# Disable collisions
+	self.set_collision_layer(0)
+	self.set_collision_mask(0)
 	
 	# Disable supercharged visuals
 	supercharge_particles_1.emitting = false

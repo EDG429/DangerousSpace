@@ -19,9 +19,7 @@ func _ready() -> void:
 
 func _on_Asteroid_body_entered(body: Node) -> void:
 	# Check if the body is the player and has a `take_damage` method
-	if body.has_method("take_damage"):
-		print("Collided with asteroid")
-		LogManager.add_log_message("Collided with asteroid")
+	if body.has_method("take_damage"):		
 		body.take_damage(damage)
 	if body.is_in_group("PlayerBullets"):
 		take_damage(damage) # <= we can decide if we want the asteroid to be an indestructible or destructible

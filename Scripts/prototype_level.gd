@@ -12,7 +12,7 @@ const MAX_SCALE = 1.5  # Maximum scale of the asteroid
 @onready var background: Sprite2D = $Background
 @onready var deadline: StaticBody2D = $Deadline
 
-@export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 10.0
+@export var SUPERCHARGE_BUFF_SPAWN_INTERVAL: float = 3.0
 @export var SUPERCHARGE_BUFF_SPAWN_RADIUS: float = 300.0  # Maximum distance from the player to spawn the buff
 @export var ASTEROID_SPAWN_INTERVAL: float = 5.0
 @export var ASTEROID_SPAWN_RADIUS: float = 700.0  # Maximum distance from the player to spawn the buff
@@ -172,7 +172,7 @@ func spawn_supercharge_buff() -> Vector2:
 	
 	# Clamp the spawn position to ensure it remains within background bounds
 	spawn_x = clamp(spawn_x, -SIDE + 30, SIDE - 30)  # Clamp X to stay within left/right bounds
-	spawn_y = clamp(spawn_y, player_current_position.y - 150, LNG / 2)  # Clamp Y to stay forward and within bounds
+	spawn_y = clamp(spawn_y, abs(player_current_position.y - 150), player_current_position.y + SUPERCHARGE_BUFF_SPAWN_RADIUS) if player_current_position.y > 0 else clamp(spawn_y, abs(player_current_position.y - 150), player_current_position.y - SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Clamp Y to stay forward and within bounds
 	
 	var buff_spawn_position = Vector2(spawn_x, spawn_y)
 	
@@ -180,6 +180,9 @@ func spawn_supercharge_buff() -> Vector2:
 	var supercharge_buff = SUPERCHARGE_BUFF_SCENE.instantiate()
 	add_child(supercharge_buff)
 	supercharge_buff.global_position = buff_spawn_position
+	supercharge_buff.z_index = 1
+	print("Buff visibility: ", supercharge_buff.visible)
+	print("Buff y position: ", supercharge_buff.global_position.y)
 	
 	return buff_spawn_position
 
@@ -202,7 +205,7 @@ func spawn_supercharge_debuff() -> void:
 		
 		# Clamp the spawn position to remain within the background bounds
 		spawn_position.x = clamp(spawn_position.x, -SIDE + 30, SIDE - 30)
-		spawn_position.y = clamp(spawn_position.y, player_current_position.y - 150, LNG / 2)
+		spawn_position.y = clamp(spawn_position.y, abs(player_current_position.y - 150), player_current_position.y + SUPERCHARGE_BUFF_SPAWN_RADIUS) if player_current_position.y > 0 else clamp(spawn_position.y, abs(player_current_position.y - 150), player_current_position.y - SUPERCHARGE_BUFF_SPAWN_RADIUS)
 		
 		# Check if the position is valid (distance from the buff)
 		if spawn_position.distance_to(buff_spawn_position) >= 35.0:
@@ -216,6 +219,7 @@ func spawn_supercharge_debuff() -> void:
 		var supercharge_debuff = DEBUFF_SCENE.instantiate()
 		add_child(supercharge_debuff)
 		supercharge_debuff.global_position = spawn_position
+		supercharge_debuff.z_index = 1
 
 func _on_SuperchargeSpawn_Timer_timeout() -> void:
 	spawn_supercharge_buff()

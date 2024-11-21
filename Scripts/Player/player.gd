@@ -128,9 +128,8 @@ func _on_PrimaryFire_MuzzleFlashTimer_timeout() -> void:
 	primary_muzzle_light.visible = false
 
 func Primary_Fire() -> void:
-	can_primary_fire = false
-	print("shots fired! Primary Fire")
-	LogManager.add_log_message("Testing log messages programmatically!")
+	can_primary_fire = false	
+	
 	# Enable Muzzle Light
 	primary_muzzle_light.global_position = global_position + Vector2(0, 24)
 	primary_muzzle_light.visible = true
@@ -156,7 +155,7 @@ func Primary_Fire() -> void:
 
 func Secondary_Fire() -> void:
 	can_secondary_fire = false
-	print("shots fired! Secondary Fire")
+	
 	
 	# Code for muzzle light will go here
 	# XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -240,6 +239,10 @@ func die() -> void:
 	animated_sprite.play("death")
 	on_player_death_sound.play()
 	
+	# Disable collisions
+	self.set_collision_layer(0)
+	self.set_collision_mask(0)
+	
 	# Disable supercharged visuals
 	supercharge_particles_1.emitting = false
 	supercharge_particles_2.emitting = false
@@ -250,12 +253,12 @@ func die() -> void:
 	
 	# Wait for the animation to finish
 	await get_tree().create_timer(5).timeout
-	print("Player death animation.")
+	
 	is_dead = true
 	# Emit signal when death process is complete
 	emit_signal("player_death_complete")
 	GameState.mark_player_dead()
-	print("Player death signal.")
+	
 # -------------------------------------- Dodge Logic Start ---------------------------------------------- #
 
 func dodge() -> void:

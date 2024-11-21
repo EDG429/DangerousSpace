@@ -61,7 +61,8 @@ func _process(delta: float) -> void:
 		return
 	
 	if is_dead or health <= 0:
-		collision_shape_2d.disabled = true
+		self.set_collision_layer(0)
+		self.set_collision_mask(0)
 		return
 	
 	# Ensure the player instance is valid
@@ -113,8 +114,9 @@ func die() -> void:
 	
 	is_dead = true
 	
-	# Disable collisionshape
-	collision_shape_2d.disabled
+	# Disable collisions
+	self.set_collision_layer(0)
+	self.set_collision_mask(0)
 	
 	# Disable supercharged visuals
 	supercharge_particles_1.emitting = false
@@ -130,7 +132,7 @@ func die() -> void:
 	on_enemy_damage_sound.play()
 	on_enemy_explosion_sound.play()
 	animated_sprite.play("death")
-	print("Enemy destroyed!")
+	
 	ScoreManager.add_points(BOUNTY)  # Award points to the player
 	await get_tree().create_timer(3).timeout
 	queue_free()  # Remove the enemy from the scene
