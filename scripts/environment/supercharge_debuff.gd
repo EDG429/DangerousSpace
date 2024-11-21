@@ -21,7 +21,6 @@ func _process(delta: float) -> void:
 func _on_body_entered(body: Node) -> void:
 	if body is Player and sprite_2d.visible:
 		body.apply_supercharge_debuff(duration)  # Apply the buff to the player
-		body.heal(heal_amount)
 		pickup_sound.play()
 		ScoreManager.substract_points(50)
 		sprite_2d.visible = false

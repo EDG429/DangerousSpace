@@ -41,7 +41,6 @@ var player_dead: bool = false
 
 func _ready() -> void:
 	
-	GameState.connect("player_died", Callable(self, "_on_player_died"))
 	
 	health = MAX_HP
 	if health_bar:
@@ -111,6 +110,7 @@ func _on_DamageFeedbackTimer_timeout() -> void:
 
 
 func die() -> void:
+	
 	is_dead = true
 	
 	# Disable collisionshape

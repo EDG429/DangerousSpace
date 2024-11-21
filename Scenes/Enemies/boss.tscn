@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://gvwfoa4u7kbt"]
+[gd_scene load_steps=47 format=3 uid="uid://gvwfoa4u7kbt"]
 
 [ext_resource type="Texture2D" uid="uid://btq72cp7d4yi4" path="res://Assets/Sprites/Boss/BossAwakening01.png" id="1_2jtha"]
 [ext_resource type="Script" path="res://scripts/Enemies/boss.gd" id="1_pc70t"]
@@ -36,7 +36,9 @@
 [ext_resource type="Texture2D" uid="uid://b33qqxhx4x2yg" path="res://Assets/Sprites/Boss/BossIdle03.png" id="33_p0eg8"]
 [ext_resource type="PackedScene" uid="uid://b2fde3mnc20fv" path="res://Scenes/Player/healthbar.tscn" id="35_etiog"]
 [ext_resource type="AudioStream" uid="uid://bo5eabux6qg0w" path="res://Assets/SFX/sfx_BulletImpactOnEnemy.wav" id="36_g04nk"]
-[ext_resource type="AudioStream" uid="uid://1vn33nik6uln" path="res://Assets/SFX/sfx_EnemyExplosion.wav" id="37_ogf0w"]
+[ext_resource type="AudioStream" uid="uid://bf0jcu42iyln6" path="res://Assets/SFX/sfx_BossAwakeningSound.wav" id="38_4h2i6"]
+[ext_resource type="AudioStream" uid="uid://cmcjhgclaihds" path="res://Assets/SFX/sfx_BossExplosion.wav" id="39_cnly5"]
+[ext_resource type="AudioStream" uid="uid://bnx7x61uqnd7v" path="res://Assets/SFX/sfx_BossShutdown.wav" id="39_p7q31"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6mr74"]
 animations = [{
@@ -230,12 +232,14 @@ size = Vector2(1288, 216)
 scale = Vector2(3, 3)
 script = ExtResource("1_pc70t")
 SPEED = 90.0
-MAX_HP = 10000
+MAX_HP = 1500
 BOUNTY = 1000
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_6mr74")
-animation = &"idle"
+animation = &"awakening"
+frame = 6
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -3)
@@ -258,8 +262,20 @@ one_shot = true
 [node name="OnEnemyDamage_Sound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("36_g04nk")
 
-[node name="OnEnemyExplosion_Sound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("37_ogf0w")
+[node name="AwakeningSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("38_4h2i6")
+volume_db = 5.0
+pitch_scale = 0.85
+
+[node name="ShutdownSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("39_p7q31")
+volume_db = 5.0
+pitch_scale = 0.85
+
+[node name="BossExplosionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("39_cnly5")
+volume_db = 5.0
+pitch_scale = 0.85
 
 [node name="Supercharge_Particles1" type="CPUParticles2D" parent="."]
 emitting = false
@@ -320,6 +336,8 @@ one_shot = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AwakenZone"]
 position = Vector2(44, 12)
 shape = SubResource("RectangleShape2D_pbdwr")
+
+[node name="OnEnemyExplosion_Sound" type="AudioStreamPlayer2D" parent="."]
 
 [connection signal="timeout" from="Fire_Timer" to="." method="_on_Boss_FireTimer_timeout"]
 [connection signal="body_entered" from="AwakenZone" to="." method="_on_awaken_zone_body_entered"]

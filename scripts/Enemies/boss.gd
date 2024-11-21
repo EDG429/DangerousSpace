@@ -1,6 +1,9 @@
 extends Enemy
-
+class_name Boss
 @onready var awaken_zone: Area2D = $AwakenZone
+@onready var awakening_sound: AudioStreamPlayer2D = $AwakeningSound
+@onready var shutdown_sound: AudioStreamPlayer2D = $ShutdownSound
+@onready var boss_explosion_sound: AudioStreamPlayer2D = $BossExplosionSound
 
 # Boss is asleep on spawn, only wakes up when the player enters its "zone"
 var is_asleep: bool = true
@@ -17,6 +20,7 @@ func awaken() -> void:
 	is_awakening = true
 
 	animated_sprite.play("awakening")
+	awakening_sound.play()
 	await get_tree().create_timer(3).timeout
 
 	is_awakening = false
@@ -41,25 +45,23 @@ func initialize_bossfight() -> void:
 		return  # Exit if the player is not found
 
 	# Start firing timer
-	fire_timer.disconnect("timeout", Callable(self, "_on_FireTimer_timeout"))
+	
 	fire_timer.connect("timeout", Callable(self, "_on_FireTimer_timeout"))
 	fire_timer.wait_time = FIRE_RATE
 	fire_timer.start()
 
-	# Start damage flickering timer
-	damage_flicker_timer.disconnect("timeout", Callable(self, "_on_DamageFeedbackTimer_timeout"))
+	# Start damage flickering timer	
 	damage_flicker_timer.connect("timeout", Callable(self, "_on_DamageFeedbackTimer_timeout"))
 	fire_timer.wait_time = FIRE_RATE
 	damage_flicker_timer.start()
 
 func _ready() -> void:
-	GameState.connect("player_died", Callable(self, "_on_player_died"))
 	sleep()
 
 func _on_awaken_zone_body_entered(body: Node2D) -> void:
 	if body is Player and is_asleep:
 		is_asleep = false
-		awaken_zone.monitorable = false
+		awaken_zone.set_deferred("monitorable", false)
 		awaken_zone.queue_free()
 		awaken()
 
@@ -99,6 +101,33 @@ func fire() -> void:
 func _on_Boss_FireTimer_timeout() -> void:
 	if not is_asleep and not is_dead and is_instance_valid(player):
 		fire()
+
+func die() -> void:
+	is_dead = true
+	
+	# Disable collisionshape
+	collision_shape_2d.disabled
+	
+	# Disable supercharged visuals
+	supercharge_particles_1.emitting = false
+	supercharge_particles_2.emitting = false
+	
+	# Disable debuff visuals
+	debuff_particles_1.emitting = false
+	debuff_particles_2.emitting = false
+	
+	# Disable health bar
+	health_bar.visible = false
+	
+	shutdown_sound.play()
+	await get_tree().create_timer(1.5).timeout
+	boss_explosion_sound.play()
+	animated_sprite.play("death")
+	print("Enemy destroyed!")
+	ScoreManager.add_points(BOUNTY)  # Award points to the player
+	await get_tree().create_timer(3).timeout
+	queue_free()  # Remove the enemy from the scene
+
 
 func _on_player_died() -> void:
 	player_dead = true

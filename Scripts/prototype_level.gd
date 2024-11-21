@@ -168,11 +168,11 @@ func spawn_supercharge_buff() -> Vector2:
 	
 	# Generate in a random position around the player
 	var spawn_x = player_current_position.x + randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS)
-	var spawn_y = - player_current_position.y + randf_range(- 80, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
+	var spawn_y = - player_current_position.y + randf_range(- 150, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
 	
 	# Clamp the spawn position to ensure it remains within background bounds
 	spawn_x = clamp(spawn_x, -SIDE + 30, SIDE - 30)  # Clamp X to stay within left/right bounds
-	spawn_y = clamp(spawn_y, player_current_position.y - 80, LNG / 2)  # Clamp Y to stay forward and within bounds
+	spawn_y = clamp(spawn_y, player_current_position.y - 150, LNG / 2)  # Clamp Y to stay forward and within bounds
 	
 	var buff_spawn_position = Vector2(spawn_x, spawn_y)
 	
@@ -197,12 +197,12 @@ func spawn_supercharge_debuff() -> void:
 	while not is_valid_position and attempts > 0:
 		# Generate a random position for the debuff
 		var spawn_x = player_current_position.x + randf_range(-SUPERCHARGE_BUFF_SPAWN_RADIUS, SUPERCHARGE_BUFF_SPAWN_RADIUS)
-		var spawn_y = - player_current_position.y + randf_range(- 80, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
+		var spawn_y = - player_current_position.y + randf_range(- 150, SUPERCHARGE_BUFF_SPAWN_RADIUS)  # Always forward (Y increases)
 		spawn_position = Vector2(spawn_x, spawn_y)
 		
 		# Clamp the spawn position to remain within the background bounds
 		spawn_position.x = clamp(spawn_position.x, -SIDE + 30, SIDE - 30)
-		spawn_position.y = clamp(spawn_position.y, player_current_position.y - 80, LNG / 2)
+		spawn_position.y = clamp(spawn_position.y, player_current_position.y - 150, LNG / 2)
 		
 		# Check if the position is valid (distance from the buff)
 		if spawn_position.distance_to(buff_spawn_position) >= 35.0:
