@@ -12,6 +12,9 @@ extends CharacterBody2D
 @export var SECONDARY_SHOOTING_SPEED: float = 0.175 # Shooting cooldown in seconds
 @export var BULLET_PLAYER_PRIMARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_primary_fire.tscn") # Getting the projectile scene for primary fire
 @export var BULLET_PLAYER_SECONDARY_FIRE_scene: PackedScene = preload("res://Scenes/Player/bullet_player_secondary_fire.tscn") # Getting the projectile scene for secondary fire
+@export var MISSILE_SCENE: PackedScene = preload("res://Scenes/Player/player_missile.tscn")
+@export var MAX_MISSILES: int = 3
+@export var reload_time: float = 30.0  # Reload time per missile
 @export var SUPERCHARGE_MULTIPLIER: float = 2.0 # Multiplier for firing speed and damage
 
 
@@ -40,6 +43,8 @@ extends CharacterBody2D
 @onready var debuff_particles_1: CPUParticles2D = $Debuff_Particles1
 @onready var debuff_particles_2: CPUParticles2D = $Debuff_Particles1/Debuff_Particles2
 @onready var level_music: AudioStreamPlayer2D = $LevelMusic
+@onready var missile_hud: Label = $MissileHUD/MissileCount
+@onready var missile_sprites: VBoxContainer = $MissileHUD/MissileSprites
 
 
 # Boolean flags
@@ -58,6 +63,8 @@ var health: int
 var last_direction: Vector2 = Vector2.UP  # Default direction (forward)
 var shake_intensity: float = 7.5 # Maximum screen shake offset in pixels
 var shake_duration: float = 0.1  # Total duration of the shake in seconds
+var available_missiles: int = MAX_MISSILES
+var missile_reload_timer: Timer = null
 
 # Signals
 signal player_death_complete
@@ -66,6 +73,11 @@ func _ready() -> void:
 	health = MAX_HP
 	if health_bar:
 		health_bar.init_health(health)
+	missile_reload_timer = Timer.new()
+	add_child(missile_reload_timer)
+	missile_reload_timer.one_shot = true
+	missile_reload_timer.connect("timeout", Callable(self, "_on_reload_missile"))
+	update_missile_hud()
 
 func _physics_process(_delta: float) -> void:
 	# If the player is dead prevent any update
@@ -116,6 +128,9 @@ func fire() -> void:
 		
 	if Input.is_action_pressed("secondary_fire") and can_secondary_fire:
 		Secondary_Fire()
+		
+	if Input.is_action_just_pressed("special_fire") and available_missiles > 0:
+		fire_missile()
 
 func _on_timer_timeout_PrimaryFire() -> void:
 	can_primary_fire = true
@@ -185,6 +200,27 @@ func Secondary_Fire() -> void:
 	
 	# Cooldown timer
 	secondary_fire_timer.start(SECONDARY_SHOOTING_SPEED)
+
+func fire_missile() -> void:
+	# Spawn the missile above the player
+	var missile_instance = MISSILE_SCENE.instantiate()
+	get_parent().add_child(missile_instance)
+	missile_instance.global_position = global_position
+	
+	# Decrease missile count and start reload
+	available_missiles -= 1
+	update_missile_hud()
+	missile_reload_timer.start(reload_time)
+
+func _on_reload_missile() -> void:
+	if available_missiles < MAX_MISSILES:
+		available_missiles += 1
+		update_missile_hud()
+
+func update_missile_hud() -> void:
+	missile_hud.text = "Missiles Left: %d" % available_missiles
+	for i in range(missile_sprites.get_child_count()):
+		missile_sprites.get_child(i).visible = i < available_missiles
 
 #----------------------------- Firing Logic End -----------------------------------------#
 

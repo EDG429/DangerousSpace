@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bpiurtfslv1ym"]
+[gd_scene load_steps=33 format=3 uid="uid://bpiurtfslv1ym"]
 
 [ext_resource type="Script" path="res://scripts/Player/player.gd" id="1_ysrji"]
 [ext_resource type="Texture2D" uid="uid://b700d46as0106" path="res://Assets/Sprites/Sprite-player_dodge_01.png" id="2_t56qb"]
@@ -23,6 +23,7 @@
 [ext_resource type="AudioStream" uid="uid://d0ji1ekt6xd2x" path="res://Assets/SFX/sfx_OnDodge.wav" id="20_0fcad"]
 [ext_resource type="AudioStream" uid="uid://dhdqdnc8r02ko" path="res://Assets/SFX/sfx_CannotDodge.wav" id="21_63i8l"]
 [ext_resource type="AudioStream" uid="uid://bjobmr0rp7ann" path="res://Assets/Music/2021-08-30_-_Boss_Time_-_www.FesliyanStudios.com.mp3" id="23_m4jv0"]
+[ext_resource type="Texture2D" uid="uid://braq3hnjjtchj" path="res://Assets/Sprites/EnemyBullet.png" id="24_osnn7"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hppht"]
 resource_local_to_scene = true
@@ -110,6 +111,10 @@ min_value = -200.0
 max_value = 200.0
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.578947, 200), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="SystemFont" id="SystemFont_iyqlu"]
+font_names = PackedStringArray("Consolas")
+font_weight = 999
 
 [node name="Player" type="CharacterBody2D"]
 rotation = 0.00418758
@@ -258,6 +263,38 @@ color = Color(0.924349, 0.975658, 1, 1)
 stream = ExtResource("23_m4jv0")
 autoplay = true
 parameters/looping = true
+
+[node name="MissileHUD" type="CanvasLayer" parent="."]
+
+[node name="MissileCount" type="Label" parent="MissileHUD"]
+offset_left = -365.0
+offset_top = 87.0
+offset_right = -307.0
+offset_bottom = 110.0
+theme_override_fonts/font = SubResource("SystemFont_iyqlu")
+theme_override_font_sizes/font_size = 8
+text = "Missile Count"
+
+[node name="MissileSprites" type="VBoxContainer" parent="MissileHUD"]
+offset_left = -358.0
+offset_top = 100.0
+offset_right = -318.0
+offset_bottom = 140.0
+
+[node name="MissileSprite1" type="Sprite2D" parent="MissileHUD/MissileSprites"]
+position = Vector2(11, 6)
+scale = Vector2(0.025, 0.025)
+texture = ExtResource("24_osnn7")
+
+[node name="MissilesSprite2" type="Sprite2D" parent="MissileHUD/MissileSprites"]
+position = Vector2(20, 6)
+scale = Vector2(0.025, 0.025)
+texture = ExtResource("24_osnn7")
+
+[node name="MissilesSprite3" type="Sprite2D" parent="MissileHUD/MissileSprites"]
+position = Vector2(30, 6)
+scale = Vector2(0.025, 0.025)
+texture = ExtResource("24_osnn7")
 
 [connection signal="timeout" from="PrimaryFire_Timer" to="." method="_on_timer_timeout_PrimaryFire"]
 [connection signal="timeout" from="SecondaryFire_Timer" to="." method="_on_timer_timeout_SecondaryFire"]

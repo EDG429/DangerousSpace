@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://y00pksjhqs0w"]
+
+[ext_resource type="Texture2D" uid="uid://braq3hnjjtchj" path="res://Assets/Sprites/EnemyBullet.png" id="1_dcjvy"]
+[ext_resource type="Script" path="res://scripts/Player/player_missile.gd" id="1_rxy6v"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pu6dk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_dcjvy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c4430"]
+radius = 100.0
+height = 720.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_134e1"]
+radius = 355.051
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6assh"]
+radius = 199.003
+
+[node name="Missile node" type="Node2D"]
+script = ExtResource("1_rxy6v")
+
+[node name="Missile Sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+sprite_frames = SubResource("SpriteFrames_pu6dk")
+
+[node name="MissileImpact" type="Area2D" parent="Missile Sprite"]
+
+[node name="MissileImpactCollision" type="CollisionShape2D" parent="Missile Sprite/MissileImpact"]
+shape = SubResource("CapsuleShape2D_c4430")
+
+[node name="ScanArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScanArea"]
+shape = SubResource("CircleShape2D_134e1")
+
+[node name="ExplosionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea"]
+shape = SubResource("CircleShape2D_6assh")
+
+[connection signal="body_entered" from="Missile Sprite/MissileImpact" to="." method="_on_MissileImpact_body_entered"]
+[connection signal="body_entered" from="ScanArea" to="." method="_on_ScanArea_body_entered"]
+[connection signal="body_entered" from="ExplosionArea" to="." method="_on_ExplosionArea_body_entered"]
